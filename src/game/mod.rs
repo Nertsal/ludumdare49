@@ -33,6 +33,7 @@ pub struct GameState {
     reactor: Reactor,
     asteroids: Vec<Asteroid>,
 
+    particle_queue: Vec<ParticleGroup>,
     particles: Vec<Particle>,
 
     spawn_delay: f32,
@@ -68,6 +69,7 @@ impl GameState {
             },
             asteroids: vec![],
 
+            particle_queue: vec![],
             particles: vec![],
 
             spawn_delay: SPAWN_DELAY,

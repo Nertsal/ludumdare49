@@ -14,6 +14,8 @@ impl GameState {
         self.break_asteroids();
         self.clean();
         self.spawner(delta_time);
+
+        self.spawn_particles();
     }
 
     fn update_reactor(&mut self, delta_time: f32) {
@@ -65,9 +67,7 @@ impl GameState {
         }
     }
 
-    fn collide(&mut self, delta_time: f32) {
-        let mut particles = Vec::new();
-
+    fn collide(&mut self, _delta_time: f32) {
         // Player - Border
         if let Some(collision) =
             Collision::circle_border(&self.player.rigid_circle.circle, &self.border)
@@ -90,19 +90,6 @@ impl GameState {
             {
                 collide::collide_rigid_rigid(player, &mut asteroid.rigid_circle, collision);
                 asteroid.break_self = true;
-
-                // Particles
-                let radius = asteroid.rigid_circle.circle.radius / 2.5;
-                particles.push(ParticleGroup {
-                    position: asteroid.rigid_circle.circle.position,
-                    amount_range: 5..10,
-                    radius_range: radius - 0.1..radius + 0.1,
-                    initial_velocity: Vec2::ZERO,
-                    velocity_offset_x_range: -5.0..5.0,
-                    velocity_offset_y_range: -5.0..5.0,
-                    color_reference: asteroid.rigid_circle.circle.color,
-                    color_alpha: PARTICLE_ALPHA,
-                });
             }
         }
 
@@ -116,11 +103,6 @@ impl GameState {
                 asteroid.break_self = true;
             }
         }
-
-        // Spawn particles
-        for particle_group in particles {
-            self.spawn_particle_group(particle_group);
-        }
     }
 
     /// Break asteroids
@@ -129,6 +111,10 @@ impl GameState {
 
         // Prepare new asteroids
         for break_asteroid in self.asteroids.iter().filter(|asteroid| asteroid.break_self) {
+            // Particles
+            self.particle_queue.push(asteroid_particles(break_asteroid));
+
+            // Prepare
             let velocity = break_asteroid.rigid_circle.velocity;
             let len = velocity.len();
 
@@ -196,7 +182,30 @@ impl GameState {
             self.reactor.explode_cooldown = self.reactor.explode_delay;
 
             // Explode all asteroids
-            self.asteroids.clear();
+            for asteroid in self.asteroids.drain(..) {
+                self.particle_queue.push(asteroid_particles(&asteroid));
+            }
         }
+    }
+
+    fn spawn_particles(&mut self) {
+        let particles = std::mem::take(&mut self.particle_queue);
+        for particle_group in particles {
+            self.spawn_particle_group(particle_group);
+        }
+    }
+}
+
+fn asteroid_particles(asteroid: &Asteroid) -> ParticleGroup {
+    let radius = asteroid.rigid_circle.circle.radius / 2.5;
+    ParticleGroup {
+        position: asteroid.rigid_circle.circle.position,
+        amount_range: 5..10,
+        radius_range: radius - 0.1..radius + 0.1,
+        initial_velocity: Vec2::ZERO,
+        velocity_offset_x_range: -5.0..5.0,
+        velocity_offset_y_range: -5.0..5.0,
+        color_reference: asteroid.rigid_circle.circle.color,
+        color_alpha: PARTICLE_ALPHA,
     }
 }
