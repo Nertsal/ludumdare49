@@ -9,9 +9,15 @@ pub const PLAYER_MASS: f32 = 10.0;
 pub const PLAYER_COLOR: Color<f32> = Color::RED; // Color::rgb(1.0, 0.0, 0.0);
 
 pub const REACTOR_RADIUS: f32 = 5.0;
-pub const REACTOR_HEALTH: f32 = 10.0;
-pub const REACTOR_COLOR: Color<f32> = Color::GREEN;
+pub const REACTOR_HEALTH: f32 = 1000.0;
 pub const REACTOR_EXPLODE_COOLDOWN: f32 = 30.0;
+pub const REACTOR_HEALTH_COLOR: Color<f32> = Color::GREEN;
+pub const REACTOR_COLOR: Color<f32> = Color {
+    r: 0.0,
+    g: 0.5,
+    b: 0.0,
+    a: 1.0,
+};
 
 pub const ASTEROID_COLOR: Color<f32> = Color::GRAY;
 pub const ASTEROID_MASS_MIN: f32 = 50.0;

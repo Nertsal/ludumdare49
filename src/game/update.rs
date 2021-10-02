@@ -94,13 +94,14 @@ impl GameState {
         }
 
         // Reactor - Asteroid
-        let reactor = &self.reactor.circle;
+        let reactor = &mut self.reactor;
         for asteroid in &mut self.asteroids {
             if let Some(collision) =
-                Collision::circle_circle(&asteroid.rigid_circle.circle, reactor)
+                Collision::circle_circle(&asteroid.rigid_circle.circle, &reactor.circle)
             {
                 collide::collide_rigid_static(&mut asteroid.rigid_circle, collision);
                 asteroid.break_self = true;
+                reactor.damage(asteroid.rigid_circle.mass);
             }
         }
     }

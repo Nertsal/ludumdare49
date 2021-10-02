@@ -10,6 +10,7 @@ pub struct Reactor {
 
 impl Reactor {
     pub fn new(circle: Circle, max_health: f32, explode_delay: f32) -> Self {
+        assert!(max_health > 0.0);
         Self {
             circle,
             max_health,
@@ -19,12 +20,20 @@ impl Reactor {
         }
     }
 
+    pub fn health_circle(&self) -> Circle {
+        Circle {
+            position: self.circle.position,
+            radius: self.circle.radius * self.health / self.max_health,
+            color: REACTOR_HEALTH_COLOR,
+        }
+    }
+
     /// Damages the reactor and returns whether reactor is still alive or not
     pub fn damage(&mut self, damage: f32) -> bool {
         self.health -= damage;
         let alive = self.health > 0.0;
         if !alive {
-            self.health = self.max_health;
+            self.health = 0.0;
         }
         alive
     }
