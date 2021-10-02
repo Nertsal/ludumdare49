@@ -45,6 +45,13 @@ impl GameState {
     }
 
     fn collide(&mut self, delta_time: f32) {
+        // Player - Border
+        if let Some(collision) =
+            Collision::circle_border(&self.player.rigid_circle.circle, &self.border)
+        {
+            collide::collide_rigid_static(&mut self.player.rigid_circle, collision);
+        }
+
         // Player - Reactor
         if let Some(collision) =
             Collision::circle_circle(&self.player.rigid_circle.circle, &self.reactor.circle)
