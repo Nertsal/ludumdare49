@@ -6,6 +6,8 @@ mod pregame;
 #[derive(geng::Assets)]
 pub struct Assets {
     pub nuclear: ugli::Texture,
+    pub rocket: ugli::Texture,
+    pub rocket_booster: ugli::Texture,
 }
 
 fn main() {
@@ -36,6 +38,8 @@ fn main() {
             move |assets| {
                 let mut assets = assets.unwrap();
                 assets.nuclear.set_filter(ugli::Filter::Nearest);
+                assets.rocket.set_filter(ugli::Filter::Nearest);
+                assets.rocket_booster.set_filter(ugli::Filter::Nearest);
 
                 pregame::PregameState::new(&geng, &Rc::new(assets))
             }

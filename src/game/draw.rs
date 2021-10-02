@@ -6,7 +6,23 @@ impl GameState {
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
         // Draw player
-        self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
+        self.geng.draw_2d().textured_quad(
+            framebuffer,
+            &self.camera,
+            self.player.rigid_circle.circle.aabb(),
+            &self.assets.rocket,
+            Color::WHITE,
+        );
+        if self.player.is_accelerating {
+            self.geng.draw_2d().textured_quad(
+                framebuffer,
+                &self.camera,
+                self.player.rigid_circle.circle.aabb(),
+                &self.assets.rocket_booster,
+                Color::WHITE,
+            );
+        }
+        // self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
 
         // Draw reactor
         self.geng.draw_2d().textured_quad(

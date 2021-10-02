@@ -4,6 +4,7 @@ pub struct Player {
     pub rigid_circle: RigidCircle,
     pub max_speed: f32,
     pub acceleration: f32,
+    pub is_accelerating: bool,
 }
 
 impl Player {
@@ -12,6 +13,7 @@ impl Player {
             rigid_circle,
             max_speed,
             acceleration,
+            is_accelerating: false,
         }
     }
 
@@ -23,6 +25,8 @@ impl Player {
         } else {
             direction
         };
+
+        self.is_accelerating = len > 0.0;
 
         let target_speed = target_direction * self.max_speed;
         self.rigid_circle
