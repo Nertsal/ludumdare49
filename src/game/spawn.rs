@@ -13,9 +13,7 @@ impl GameState {
         let speed = rng.gen_range(ASTEROID_SPEED_MIN..=ASTEROID_SPEED_MAX);
 
         let circle = Circle::new(position, radius, ASTEROID_COLOR);
-        let mut rigid_circle = RigidCircle::new(circle, mass);
-        rigid_circle.velocity = direction * speed;
-        let asteroid = Asteroid::new(rigid_circle);
+        let asteroid = Asteroid::new(circle, mass, direction * speed);
 
         self.asteroids.push(asteroid);
     }

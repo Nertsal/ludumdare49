@@ -20,6 +20,11 @@ impl GameState {
         for asteroid in &self.asteroids {
             self.draw_circle(framebuffer, &asteroid.rigid_circle.circle);
         }
+
+        // Draw particles
+        for particle in &self.particles {
+            self.draw_circle(framebuffer, &particle.rigid_circle.circle);
+        }
     }
 
     fn draw_circle(&self, framebuffer: &mut ugli::Framebuffer, circle: &Circle) {

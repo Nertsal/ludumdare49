@@ -7,6 +7,7 @@ mod collision;
 mod constants;
 mod draw;
 mod handle_event;
+mod particle;
 mod player;
 mod reactor;
 mod spawn;
@@ -15,6 +16,7 @@ mod update;
 use asteroid::*;
 use circle::*;
 use constants::*;
+use particle::*;
 use player::*;
 use reactor::*;
 
@@ -30,6 +32,8 @@ pub struct GameState {
     player: Player,
     reactor: Reactor,
     asteroids: Vec<Asteroid>,
+
+    particles: Vec<Particle>,
 
     spawn_delay: f32,
     spawn_timer: f32,
@@ -60,9 +64,11 @@ impl GameState {
             },
             reactor: {
                 let circle = Circle::new(Vec2::ZERO, REACTOR_RADIUS, REACTOR_COLOR);
-                Reactor::new(circle, REACTOR_HEALTH)
+                Reactor::new(circle, REACTOR_HEALTH, REACTOR_EXPLODE_COOLDOWN)
             },
             asteroids: vec![],
+
+            particles: vec![],
 
             spawn_delay: SPAWN_DELAY,
             spawn_timer: SPAWN_DELAY,
