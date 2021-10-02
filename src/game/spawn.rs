@@ -4,9 +4,15 @@ impl GameState {
     pub fn spawn_asteroid(&mut self) {
         let (position, _) = self.gen_border_pos();
         debug_assert_ne!(position, Vec2::ZERO);
-        let direction = (Vec2::ZERO - position).normalize();
 
         let mut rng = global_rng();
+
+        let direction = (Vec2::ZERO - position).normalize();
+        let angle = direction.arg();
+        let angle = angle + rng.gen_range(-ASTEROID_ANGLE_VARTIATION..=ASTEROID_ANGLE_VARTIATION);
+        let (sin, cos) = angle.sin_cos();
+        let direction = vec2(cos, sin);
+
         let random = rng.gen();
         let mass = fraction_to_range(random, ASTEROID_MASS_MIN, ASTEROID_MASS_MAX);
         let radius = fraction_to_range(random, ASTEROID_RADIUS_MIN, ASTEROID_RADIUS_MAX);
