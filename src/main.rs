@@ -1,6 +1,7 @@
 use geng::prelude::*;
 
 mod game;
+mod pregame;
 
 #[derive(geng::Assets)]
 pub struct Assets {
@@ -24,7 +25,7 @@ fn main() {
     }
 
     // Intialize geng
-    let geng = Geng::new("Ludum Dare 49 - Unstable");
+    let geng = Geng::new("Unstable Asteroids");
     let assets = <Assets as geng::LoadAsset>::load(&geng, ".");
 
     // Run
@@ -33,8 +34,10 @@ fn main() {
         geng::LoadingScreen::new(&geng, geng::EmptyLoadingScreen, assets, {
             let geng = geng.clone();
             move |assets| {
-                let assets = assets.unwrap();
-                game::GameState::new(&geng, &Rc::new(assets))
+                let mut assets = assets.unwrap();
+                assets.nuclear.set_filter(ugli::Filter::Nearest);
+
+                pregame::PregameState::new(&geng, &Rc::new(assets))
             }
         }),
     );
