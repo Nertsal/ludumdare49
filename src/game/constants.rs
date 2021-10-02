@@ -19,5 +19,6 @@ pub const ASTEROID_RADIUS_MIN: f32 = 2.0;
 pub const ASTEROID_RADIUS_MAX: f32 = 5.0;
 pub const ASTEROID_SPEED_MIN: f32 = 10.0;
 pub const ASTEROID_SPEED_MAX: f32 = 25.0;
+pub const ASTEROID_DESTROY_SIZE: f32 = 0.1;
 
 pub const SPAWN_DELAY: f32 = 5.0;

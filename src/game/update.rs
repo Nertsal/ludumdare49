@@ -8,6 +8,7 @@ impl GameState {
         self.movement(delta_time);
         self.collide(delta_time);
 
+        self.clean();
         self.spawner(delta_time);
     }
 
@@ -52,8 +53,31 @@ impl GameState {
         }
 
         // Player - Asteroid
+        let player = &mut self.player.rigid_circle;
+        for asteroid in &mut self.asteroids {
+            let asteroid = &mut asteroid.rigid_circle;
+            if let Some(collision) = Collision::circle_circle(&player.circle, &asteroid.circle) {
+                collide::collide_rigid_rigid(player, asteroid, collision);
+            }
+        }
 
         // Reactor - Asteroid
+        let reactor = &self.reactor.circle;
+        for asteroid in &mut self.asteroids {
+            let asteroid = &mut asteroid.rigid_circle;
+            if let Some(collision) = Collision::circle_circle(&asteroid.circle, reactor) {
+                collide::collide_rigid_static(asteroid, collision);
+            }
+        }
+    }
+
+    /// Destroy asteroids that are out of bounds or very small
+    fn clean(&mut self) {
+        let border = &self.border;
+        self.asteroids.retain(|asteroid| {
+            asteroid.rigid_circle.circle.radius > ASTEROID_DESTROY_SIZE
+                && border.contains(asteroid.rigid_circle.circle.position)
+        });
     }
 
     fn spawner(&mut self, delta_time: f32) {
