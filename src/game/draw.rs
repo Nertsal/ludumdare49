@@ -5,11 +5,21 @@ impl GameState {
         self.framebuffer_size = framebuffer.size().map(|x| x as f32);
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
+        // Draw border
+        self.geng
+            .draw_2d()
+            .quad(framebuffer, &self.camera, self.border, Color::WHITE);
+
         // Draw player
         self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
 
         // Draw reactor
         self.draw_circle(framebuffer, &self.reactor.circle);
+
+        // Draw asteroids
+        for asteroid in &self.asteroids {
+            self.draw_circle(framebuffer, &asteroid.rigid_circle.circle);
+        }
     }
 
     fn draw_circle(&self, framebuffer: &mut ugli::Framebuffer, circle: &Circle) {

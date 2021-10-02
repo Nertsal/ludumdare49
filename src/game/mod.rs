@@ -1,15 +1,18 @@
 use geng::prelude::*;
 
+mod asteroid;
 mod circle;
+mod collide;
+mod collision;
 mod constants;
 mod draw;
 mod handle_event;
 mod player;
 mod reactor;
+mod spawn;
 mod update;
-mod collision;
-mod collide;
 
+use asteroid::*;
 use circle::*;
 use constants::*;
 use player::*;
@@ -22,8 +25,14 @@ pub struct GameState {
     framebuffer_size: Vec2<f32>,
 
     // Actual game data
+    border: AABB<f32>,
+
     player: Player,
     reactor: Reactor,
+    asteroids: Vec<Asteroid>,
+
+    spawn_delay: f32,
+    spawn_timer: f32,
 }
 
 impl GameState {
@@ -39,6 +48,8 @@ impl GameState {
             framebuffer_size: vec2(1.0, 1.0),
 
             // Actual game data
+            border: AABB::ZERO.extend_symmetric(BORDER_SIZE / 2.0),
+
             player: {
                 let circle = Circle::new(Vec2::ZERO, PLAYER_RADIUS, PLAYER_COLOR);
                 Player::new(
@@ -51,6 +62,10 @@ impl GameState {
                 let circle = Circle::new(Vec2::ZERO, REACTOR_RADIUS, REACTOR_COLOR);
                 Reactor::new(circle, REACTOR_HEALTH)
             },
+            asteroids: vec![],
+
+            spawn_delay: SPAWN_DELAY,
+            spawn_timer: SPAWN_DELAY,
         }
     }
 }

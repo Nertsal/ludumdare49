@@ -7,6 +7,8 @@ impl GameState {
 
         self.movement(delta_time);
         self.collide(delta_time);
+
+        self.spawner(delta_time);
     }
 
     fn control_player(&mut self, delta_time: f32) {
@@ -32,7 +34,13 @@ impl GameState {
     }
 
     fn movement(&mut self, delta_time: f32) {
+        // Move player
         self.player.rigid_circle.move_delta(delta_time);
+
+        // Move asteroids
+        for asteroid in &mut self.asteroids {
+            asteroid.rigid_circle.move_delta(delta_time);
+        }
     }
 
     fn collide(&mut self, delta_time: f32) {
@@ -41,6 +49,20 @@ impl GameState {
             Collision::circle_circle(&self.player.rigid_circle.circle, &self.reactor.circle)
         {
             collide::collide_rigid_static(&mut self.player.rigid_circle, collision);
+        }
+
+        // Player - Asteroid
+
+        // Reactor - Asteroid
+    }
+
+    fn spawner(&mut self, delta_time: f32) {
+        self.spawn_timer -= delta_time;
+        if self.spawn_timer <= 0.0 {
+            self.spawn_timer = self.spawn_delay;
+
+            // Spawn a new asteroid
+            self.spawn_asteroid();
         }
     }
 }
