@@ -5,14 +5,17 @@ impl GameState {
         self.framebuffer_size = framebuffer.size().map(|x| x as f32);
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
-        self.geng.default_font().draw(
+        // Draw player
+        self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
+    }
+
+    fn draw_circle(&self, framebuffer: &mut ugli::Framebuffer, circle: &Circle) {
+        self.geng.draw_2d().circle(
             framebuffer,
             &self.camera,
-            "Ludum Dare 49 - Unstable",
-            Vec2::ZERO,
-            geng::TextAlign::CENTER,
-            1.0,
-            Color::WHITE,
+            circle.position,
+            circle.radius,
+            circle.color,
         );
     }
 }
