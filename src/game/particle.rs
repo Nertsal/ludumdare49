@@ -53,7 +53,7 @@ impl GameState {
             let circle = Circle::new(particle_group.position, radius, color);
 
             let particle = Particle::new(circle, 1.0, velocity);
-            let circle = self.particles.push(particle);
+            self.particles.push(particle);
         }
     }
 }

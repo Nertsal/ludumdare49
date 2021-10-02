@@ -90,10 +90,13 @@ impl GameState {
             {
                 collide::collide_rigid_rigid(player, &mut asteroid.rigid_circle, collision);
                 asteroid.break_self = true;
+
+                // Particles
+                let radius = asteroid.rigid_circle.circle.radius / 2.5;
                 particles.push(ParticleGroup {
                     position: asteroid.rigid_circle.circle.position,
                     amount_range: 5..10,
-                    radius_range: 0.1..0.5,
+                    radius_range: radius - 0.1..radius + 0.1,
                     initial_velocity: Vec2::ZERO,
                     velocity_offset_x_range: -5.0..5.0,
                     velocity_offset_y_range: -5.0..5.0,
