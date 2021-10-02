@@ -1,3 +1,4 @@
+use super::collision::Collision;
 use super::*;
 
 impl GameState {
@@ -5,10 +6,7 @@ impl GameState {
         self.control_player(delta_time);
 
         self.movement(delta_time);
-    }
-
-    fn movement(&mut self, delta_time: f32) {
-        self.player.rigid_circle.move_delta(delta_time);
+        self.collide(delta_time);
     }
 
     fn control_player(&mut self, delta_time: f32) {
@@ -31,5 +29,20 @@ impl GameState {
         }
 
         self.player.target_velocity_direction(direction, delta_time);
+    }
+
+    fn movement(&mut self, delta_time: f32) {
+        self.player.rigid_circle.move_delta(delta_time);
+    }
+
+    fn collide(&mut self, delta_time: f32) {
+        match Collision::circle_circle(&self.player.rigid_circle.circle, &self.reactor.circle) {
+            Some(collision) => collide::collide_rigid_static(
+                &mut self.player.rigid_circle,
+                &self.reactor.circle,
+                collision,
+            ),
+            None => (),
+        }
     }
 }

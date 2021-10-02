@@ -7,6 +7,8 @@ mod handle_event;
 mod player;
 mod reactor;
 mod update;
+mod collision;
+mod collide;
 
 use circle::*;
 use constants::*;
