@@ -1,13 +1,17 @@
 use geng::prelude::*;
 
 mod circle;
+mod constants;
 mod draw;
 mod handle_event;
 mod player;
+mod reactor;
 mod update;
 
 use circle::*;
+use constants::*;
 use player::*;
+use reactor::*;
 
 pub struct GameState {
     // Usual engine things
@@ -17,6 +21,7 @@ pub struct GameState {
 
     // Actual game data
     player: Player,
+    reactor: Reactor,
 }
 
 impl GameState {
@@ -33,8 +38,16 @@ impl GameState {
 
             // Actual game data
             player: {
-                let circle = Circle::new(Vec2::ZERO, 5.0, Color::rgb(1.0, 0.0, 0.0));
-                Player::new(RigidCircle::new(circle, 10.0), 50.0, 300.0)
+                let circle = Circle::new(Vec2::ZERO, PLAYER_RADIUS, PLAYER_COLOR);
+                Player::new(
+                    RigidCircle::new(circle, PLAYER_MASS),
+                    PLAYER_SPEED,
+                    PLAYER_ACCELERATION,
+                )
+            },
+            reactor: {
+                let circle = Circle::new(Vec2::ZERO, REACTOR_RADIUS, REACTOR_COLOR);
+                Reactor::new(circle, REACTOR_HEALTH)
             },
         }
     }

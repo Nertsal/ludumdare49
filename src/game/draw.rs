@@ -7,6 +7,9 @@ impl GameState {
 
         // Draw player
         self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
+
+        // Draw reactor
+        self.draw_circle(framebuffer, &self.reactor.circle);
     }
 
     fn draw_circle(&self, framebuffer: &mut ugli::Framebuffer, circle: &Circle) {
