@@ -36,13 +36,11 @@ impl GameState {
     }
 
     fn collide(&mut self, delta_time: f32) {
-        match Collision::circle_circle(&self.player.rigid_circle.circle, &self.reactor.circle) {
-            Some(collision) => collide::collide_rigid_static(
-                &mut self.player.rigid_circle,
-                &self.reactor.circle,
-                collision,
-            ),
-            None => (),
+        // Player - Reactor
+        if let Some(collision) =
+            Collision::circle_circle(&self.player.rigid_circle.circle, &self.reactor.circle)
+        {
+            collide::collide_rigid_static(&mut self.player.rigid_circle, collision);
         }
     }
 }

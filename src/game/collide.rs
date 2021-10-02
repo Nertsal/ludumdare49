@@ -1,7 +1,7 @@
 use super::collision::Collision;
 use super::*;
 
-pub fn collide_rigid_static(rigid: &mut RigidCircle, stat: &Circle, collision: Collision) {
+pub fn collide_rigid_static(rigid: &mut RigidCircle, collision: Collision) {
     // Move rigid circle
     rigid
         .circle
