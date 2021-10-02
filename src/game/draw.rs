@@ -14,8 +14,13 @@ impl GameState {
         self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
 
         // Draw reactor
-        self.draw_circle(framebuffer, &self.reactor.circle);
-        self.draw_circle(framebuffer, &self.reactor.health_circle());
+        self.geng.draw_2d().textured_quad(
+            framebuffer,
+            &self.camera,
+            self.reactor.circle.aabb(),
+            &self.assets.nuclear,
+            self.reactor.health_color(),
+        );
 
         // Draw asteroids
         for asteroid in &self.asteroids {

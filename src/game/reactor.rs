@@ -20,12 +20,15 @@ impl Reactor {
         }
     }
 
-    pub fn health_circle(&self) -> Circle {
-        Circle {
-            position: self.circle.position,
-            radius: self.circle.radius * self.health / self.max_health,
-            color: REACTOR_HEALTH_COLOR,
-        }
+    pub fn health_color(&self) -> Color<f32> {
+        let s = REACTOR_HEALTH_COLOR;
+        let e = REACTOR_COLOR;
+        let f = 1.0 - self.health / self.max_health;
+        Color::rgb(
+            s.r + (e.r - s.r) * f,
+            s.g + (e.g - s.g) * f,
+            s.b + (e.b - s.b) * f,
+        )
     }
 
     /// Damages the reactor and returns whether reactor is still alive or not

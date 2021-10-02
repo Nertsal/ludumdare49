@@ -20,9 +20,12 @@ use particle::*;
 use player::*;
 use reactor::*;
 
+use crate::Assets;
+
 pub struct GameState {
     // Usual engine things
     geng: Geng,
+    assets: Rc<Assets>,
     camera: geng::Camera2d,
     framebuffer_size: Vec2<f32>,
 
@@ -42,10 +45,11 @@ pub struct GameState {
 }
 
 impl GameState {
-    pub fn new(geng: &Geng) -> Self {
+    pub fn new(geng: &Geng, assets: &Rc<Assets>) -> Self {
         Self {
             // Usual engine things
             geng: geng.clone(),
+            assets: assets.clone(),
             camera: geng::Camera2d {
                 center: Vec2::ZERO,
                 rotation: 0.0,

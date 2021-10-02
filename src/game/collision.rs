@@ -36,7 +36,7 @@ impl Collision {
     /// Checks for collisions inside the border.
     /// Returns None if there is no collision, otherwise returns Some(collision).
     pub fn circle_border(circle: &Circle, border: &AABB<f32>) -> Option<Self> {
-        let circle_aabb = AABB::point(circle.position).extend_uniform(circle.radius);
+        let circle_aabb = circle.aabb();
 
         debug_assert!(circle_aabb.width() < border.width());
         debug_assert!(circle_aabb.height() < border.height());

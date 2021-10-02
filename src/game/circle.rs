@@ -18,6 +18,11 @@ impl Circle {
     pub fn move_delta(&mut self, delta: Vec2<f32>) {
         self.position += delta;
     }
+
+    /// Returns the AABB around itself
+    pub fn aabb(&self) -> AABB<f32> {
+        AABB::point(self.position).extend_uniform(self.radius)
+    }
 }
 
 pub struct RigidCircle {
