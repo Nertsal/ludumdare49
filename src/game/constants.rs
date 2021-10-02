@@ -1,5 +1,11 @@
 use geng::prelude::{vec2, Color, Vec2};
 
+pub const DIFFICULTY_SCALE: f32 = 1.0;
+
+pub const START_SPAWN_DELAY: f32 = 5.0;
+pub const SPAWN_DELAY_SCALE: f32 = 0.1;
+pub const SPAWN_DELAY_MIN: f32 = 1.0;
+
 pub const BORDER_SIZE: Vec2<f32> = vec2(100.0, 100.0);
 
 pub const PLAYER_RADIUS: f32 = 2.5;
@@ -30,8 +36,6 @@ pub const ASTEROID_DESTROY_SIZE: f32 = 0.1;
 pub const ASTEROID_ANGLE_VARTIATION: f32 = 0.3;
 
 pub const ASTEROID_BREAK_RADIUS_VARIATION: f32 = 0.5;
-
-pub const SPAWN_DELAY: f32 = 2.0;
 
 pub const PARTICLE_ALPHA: f32 = 0.5;
 pub const PARTICLE_DECAY_TIME: f32 = 5.0;

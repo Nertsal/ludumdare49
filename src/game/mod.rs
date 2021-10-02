@@ -27,6 +27,7 @@ pub struct GameState {
     framebuffer_size: Vec2<f32>,
 
     // Actual game data
+    difficulty: f32,
     border: AABB<f32>,
 
     player: Player,
@@ -53,6 +54,7 @@ impl GameState {
             framebuffer_size: vec2(1.0, 1.0),
 
             // Actual game data
+            difficulty: 0.0,
             border: AABB::ZERO.extend_symmetric(BORDER_SIZE / 2.0),
 
             player: {
@@ -72,8 +74,8 @@ impl GameState {
             particle_queue: vec![],
             particles: vec![],
 
-            spawn_delay: SPAWN_DELAY,
-            spawn_timer: SPAWN_DELAY,
+            spawn_delay: START_SPAWN_DELAY,
+            spawn_timer: START_SPAWN_DELAY,
         }
     }
 }

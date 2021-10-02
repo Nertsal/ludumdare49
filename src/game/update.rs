@@ -3,6 +3,8 @@ use super::*;
 
 impl GameState {
     pub fn update_impl(&mut self, delta_time: f32) {
+        self.scale_difficulty(delta_time);
+
         self.update_reactor(delta_time);
         self.update_particles(delta_time);
 
@@ -16,6 +18,12 @@ impl GameState {
         self.spawner(delta_time);
 
         self.spawn_particles();
+    }
+
+    fn scale_difficulty(&mut self, delta_time: f32) {
+        self.difficulty += delta_time * DIFFICULTY_SCALE;
+        self.spawn_delay =
+            (START_SPAWN_DELAY - self.difficulty * SPAWN_DELAY_SCALE).max(SPAWN_DELAY_MIN);
     }
 
     fn update_reactor(&mut self, delta_time: f32) {
