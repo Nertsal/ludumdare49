@@ -5,11 +5,6 @@ impl GameState {
         self.framebuffer_size = framebuffer.size().map(|x| x as f32);
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
-        // Draw border
-        self.geng
-            .draw_2d()
-            .quad(framebuffer, &self.camera, self.border, Color::WHITE);
-
         // Draw player
         self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
 

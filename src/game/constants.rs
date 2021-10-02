@@ -6,7 +6,7 @@ pub const START_SPAWN_DELAY: f32 = 5.0;
 pub const SPAWN_DELAY_SCALE: f32 = 0.1;
 pub const SPAWN_DELAY_MIN: f32 = 1.0;
 
-pub const BORDER_SIZE: Vec2<f32> = vec2(100.0, 100.0);
+pub const BORDER_SIZE: Vec2<f32> = vec2(160.0, 90.0);
 
 pub const PLAYER_RADIUS: f32 = 2.5;
 pub const PLAYER_SPEED: f32 = 50.0;
