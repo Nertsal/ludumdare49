@@ -94,7 +94,7 @@ impl geng::State for GameOverState {
             framebuffer,
             &self.camera,
             AABB::point(reactor_pos).extend_uniform(10.0),
-            &self.assets.nuclear,
+            &self.assets.sprites.nuclear,
             Color::rgb(0.0, 0.5, 0.0),
         );
     }

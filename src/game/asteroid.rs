@@ -4,6 +4,7 @@ pub struct Asteroid {
     pub rigid_circle: RigidCircle,
     pub break_self: bool,
     pub destroy: bool,
+    pub texture: Rc<ugli::Texture>,
 }
 
 impl Asteroid {
@@ -12,6 +13,7 @@ impl Asteroid {
         mass: f32,
         linear_velocity: Vec2<f32>,
         rotation_velocity: f32,
+        texture: &Rc<ugli::Texture>,
     ) -> Self {
         Self {
             rigid_circle: RigidCircle {
@@ -22,6 +24,7 @@ impl Asteroid {
             },
             break_self: false,
             destroy: false,
+            texture: texture.clone(),
         }
     }
 }

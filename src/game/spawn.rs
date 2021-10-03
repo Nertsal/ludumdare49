@@ -19,7 +19,17 @@ impl GameState {
         let speed = rng.gen_range(ASTEROID_SPEED_MIN..=ASTEROID_SPEED_MAX);
 
         let circle = Circle::new(position, rng.gen_range(0.0..6.0), radius, Color::WHITE);
-        let asteroid = Asteroid::new(circle, mass, direction * speed, rng.gen_range(-1.5..1.5));
+        let asteroid = Asteroid::new(
+            circle,
+            mass,
+            direction * speed,
+            rng.gen_range(-1.5..1.5),
+            self.assets
+                .sprites
+                .asteroids
+                .choose(&mut rng)
+                .expect("failed to get a random asteroid texture"),
+        );
 
         self.asteroids.push(asteroid);
     }

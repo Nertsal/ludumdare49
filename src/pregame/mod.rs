@@ -94,7 +94,7 @@ impl geng::State for PregameState {
             framebuffer,
             &self.camera,
             AABB::point(reactor_pos).extend_uniform(10.0),
-            &self.assets.nuclear,
+            &self.assets.sprites.nuclear,
             reactor_color,
         );
     }

@@ -187,7 +187,17 @@ impl GameState {
                 radius - variation,
                 Color::WHITE,
             );
-            let asteroid = Asteroid::new(circle, mass, new_velocity, rng.gen_range(-1.5..1.5));
+            let asteroid = Asteroid::new(
+                circle,
+                mass,
+                new_velocity,
+                rng.gen_range(-1.5..1.5),
+                self.assets
+                    .sprites
+                    .asteroids
+                    .choose(&mut rng)
+                    .expect("failed to get a random asteroid texture"),
+            );
             new_asteroids.push(asteroid);
 
             let new_velocity = (velocity - perpendicular * len) / 2.0;
@@ -197,7 +207,17 @@ impl GameState {
                 radius + variation,
                 Color::WHITE,
             );
-            let asteroid = Asteroid::new(circle, mass, new_velocity, rng.gen_range(-1.5..1.5));
+            let asteroid = Asteroid::new(
+                circle,
+                mass,
+                new_velocity,
+                rng.gen_range(-1.5..1.5),
+                self.assets
+                    .sprites
+                    .asteroids
+                    .choose(&mut rng)
+                    .expect("failed to get a random asteroid texture"),
+            );
             new_asteroids.push(asteroid);
         }
 

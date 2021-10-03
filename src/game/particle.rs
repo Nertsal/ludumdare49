@@ -2,10 +2,16 @@ use super::*;
 
 pub struct Particle {
     pub rigid_circle: RigidCircle,
+    pub texture: Rc<ugli::Texture>,
 }
 
 impl Particle {
-    pub fn new(circle: Circle, mass: f32, velocity: Vec2<f32>) -> Self {
+    pub fn new(
+        circle: Circle,
+        mass: f32,
+        velocity: Vec2<f32>,
+        texture: &Rc<ugli::Texture>,
+    ) -> Self {
         Self {
             rigid_circle: RigidCircle {
                 circle,
@@ -13,6 +19,7 @@ impl Particle {
                 rotation_velocity: 0.0,
                 mass,
             },
+            texture: texture.clone(),
         }
     }
 }
@@ -51,9 +58,23 @@ impl GameState {
             let mut color = particle_group.color_reference;
             color.a = particle_group.color_alpha;
 
-            let circle = Circle::new(particle_group.position, rng.gen_range(0.0..6.0), radius, color);
+            let circle = Circle::new(
+                particle_group.position,
+                rng.gen_range(0.0..6.0),
+                radius,
+                color,
+            );
 
-            let particle = Particle::new(circle, 1.0, velocity);
+            let particle = Particle::new(
+                circle,
+                1.0,
+                velocity,
+                self.assets
+                    .sprites
+                    .asteroids
+                    .choose(&mut rng)
+                    .expect("failed to get a random asteroid texture"),
+            );
             self.particles.push(particle);
         }
     }

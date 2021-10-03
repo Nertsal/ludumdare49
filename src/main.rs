@@ -36,14 +36,33 @@ pub struct Sounds {
 }
 
 #[derive(geng::Assets)]
-pub struct Assets {
+pub struct Sprites {
     pub nuclear: ugli::Texture,
     pub rocket: ugli::Texture,
     pub rocket_booster: ugli::Texture,
-    pub asteroid: ugli::Texture,
+    #[asset(path = "asteroid/*.png", range = "1..=3")]
+    pub asteroids: Vec<Rc<ugli::Texture>>,
+}
+
+#[derive(geng::Assets)]
+pub struct Assets {
     #[asset(path = "fonts/NF_pixels/fonts/ttf/NFPixels-Regular.ttf")]
     pub font: Font,
+    pub sprites: Sprites,
     pub sounds: Sounds,
+}
+
+impl Sprites {
+    fn init(&mut self) {
+        self.nuclear.set_filter(ugli::Filter::Nearest);
+        self.rocket.set_filter(ugli::Filter::Nearest);
+        self.rocket_booster.set_filter(ugli::Filter::Nearest);
+        self.asteroids.iter_mut().for_each(|texture| {
+            Rc::get_mut(texture)
+                .unwrap()
+                .set_filter(ugli::Filter::Nearest)
+        });
+    }
 }
 
 fn main() {
@@ -73,10 +92,7 @@ fn main() {
             let geng = geng.clone();
             move |assets| {
                 let mut assets = assets.unwrap();
-                assets.nuclear.set_filter(ugli::Filter::Nearest);
-                assets.rocket.set_filter(ugli::Filter::Nearest);
-                assets.rocket_booster.set_filter(ugli::Filter::Nearest);
-                assets.asteroid.set_filter(ugli::Filter::Nearest);
+                assets.sprites.init();
 
                 pregame::PregameState::new(&geng, &Rc::new(assets))
             }

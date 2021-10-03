@@ -13,14 +13,14 @@ impl GameState {
         self.draw_textured_circle(
             framebuffer,
             &self.player.rigid_circle.circle,
-            Some(&self.assets.rocket),
+            Some(&self.assets.sprites.rocket),
         );
         // Rocket booster
         if self.player.is_accelerating {
             self.draw_textured_circle(
                 framebuffer,
                 &self.player.rigid_circle.circle,
-                Some(&self.assets.rocket_booster),
+                Some(&self.assets.sprites.rocket_booster),
             );
         }
 
@@ -29,7 +29,7 @@ impl GameState {
             self.draw_textured_circle(
                 framebuffer,
                 &asteroid.rigid_circle.circle,
-                Some(&self.assets.asteroid),
+                Some(&asteroid.texture),
             );
         }
 
@@ -38,7 +38,7 @@ impl GameState {
             self.draw_textured_circle(
                 framebuffer,
                 &particle.rigid_circle.circle,
-                Some(&self.assets.asteroid),
+                Some(&particle.texture),
             );
         }
 
@@ -46,7 +46,7 @@ impl GameState {
         self.draw_textured_circle(
             framebuffer,
             &self.reactor.circle,
-            Some(&self.assets.nuclear),
+            Some(&self.assets.sprites.nuclear),
         );
 
         // Reactor health
