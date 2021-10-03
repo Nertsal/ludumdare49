@@ -65,7 +65,7 @@ impl GameState {
             score: 0,
             difficulty: 0.0,
             border: AABB::ZERO.extend_symmetric(BORDER_SIZE / 2.0),
-            transition_delay: 3.0,
+            transition_delay: 2.0,
 
             player: {
                 let circle = Circle::new(

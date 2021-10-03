@@ -22,13 +22,6 @@ impl GameState {
             );
         }
 
-        // Draw reactor
-        self.draw_textured_circle(
-            framebuffer,
-            &self.reactor.circle,
-            Some(&self.assets.nuclear),
-        );
-
         // Draw asteroids
         for asteroid in &self.asteroids {
             self.draw_textured_circle(
@@ -47,12 +40,53 @@ impl GameState {
             );
         }
 
+        // Draw reactor
+        self.draw_textured_circle(
+            framebuffer,
+            &self.reactor.circle,
+            Some(&self.assets.nuclear),
+        );
+
+        // Reactor health
+        self.assets.font.draw(
+            framebuffer,
+            &geng::PixelPerfectCamera,
+            "Reactor Stability",
+            vec2(10.0, framebuffer_size.y - 50.0),
+            geng::TextAlign::LEFT,
+            30.0,
+            Color::WHITE,
+        );
+
+        // Draw reactor health
+        let bar_position = vec2(10.0, framebuffer_size.y - 80.0);
+        let bar_width = 175.0;
+        let bar_height = 20.0;
+        let bar_aabb = AABB::point(bar_position).extend_positive(vec2(bar_width, bar_height));
+        self.geng.draw_2d().quad(
+            framebuffer,
+            &geng::PixelPerfectCamera,
+            bar_aabb,
+            Color::rgb(0.0, 0.3, 0.0),
+        );
+        let offset = 2.0;
+        let health_aabb = bar_aabb.extend_uniform(-offset).extend_positive(vec2(
+            (self.reactor.health / self.reactor.max_health - 1.0) * (bar_width - offset),
+            0.0,
+        ));
+        self.geng.draw_2d().quad(
+            framebuffer,
+            &geng::PixelPerfectCamera,
+            health_aabb,
+            Color::rgb(0.0, 0.7, 0.0),
+        );
+
         // Score
         self.assets.font.draw(
             framebuffer,
             &geng::PixelPerfectCamera,
             &format!("SCORE: {}", self.score),
-            vec2(20.0, framebuffer_size.y - 50.0),
+            vec2(framebuffer_size.x - 200.0, framebuffer_size.y - 50.0),
             geng::TextAlign::LEFT,
             40.0,
             Color::WHITE,
