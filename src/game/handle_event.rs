@@ -7,6 +7,7 @@ impl GameState {
                 match key {
                     geng::Key::F => {
                         self.is_shop_open = !self.is_shop_open;
+                        self.shop_item_select = None;
                     }
                     _ => (),
                 }

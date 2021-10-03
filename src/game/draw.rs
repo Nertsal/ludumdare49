@@ -166,7 +166,14 @@ impl GameState {
                 .shop_item_select
                 .map(|select| select == i)
                 .unwrap_or_default();
-            self.draw_shop_item(framebuffer, shop_item, shop_item_aabb, is_selected);
+            let can_afford = self.money >= shop_item.cost;
+            self.draw_shop_item(
+                framebuffer,
+                shop_item,
+                shop_item_aabb,
+                is_selected,
+                can_afford,
+            );
 
             shop_item_aabb = shop_item_aabb.translate(vec2(item_width + spacing, 0.0));
         }
@@ -178,7 +185,16 @@ impl GameState {
         shop_item: &ShopItem,
         shop_item_aabb: AABB<f32>,
         is_selected: bool,
+        can_afford: bool,
     ) {
+        // Panel
+        self.geng.draw_2d().quad(
+            framebuffer,
+            &self.camera,
+            shop_item_aabb,
+            Color::rgba(0.0, 0.0, 0.0, 0.7),
+        );
+
         // Outline
         let (width, color) = if is_selected {
             (0.2, SHOP_ITEM_SELECTED_COLOR)
@@ -199,6 +215,7 @@ impl GameState {
         );
 
         // Cost
+        let color = if can_afford { Color::WHITE } else { Color::RED };
         self.assets.font.draw(
             framebuffer,
             &self.camera,
@@ -206,7 +223,7 @@ impl GameState {
             vec2(shop_item_aabb.center().x, shop_item_aabb.y_min + 2.0),
             geng::TextAlign::CENTER,
             3.0,
-            Color::WHITE,
+            color,
         );
     }
 
