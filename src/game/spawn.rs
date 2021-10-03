@@ -18,8 +18,8 @@ impl GameState {
         let radius = fraction_to_range(random, ASTEROID_RADIUS_MIN, ASTEROID_RADIUS_MAX);
         let speed = rng.gen_range(ASTEROID_SPEED_MIN..=ASTEROID_SPEED_MAX);
 
-        let circle = Circle::new(position, radius, ASTEROID_COLOR);
-        let asteroid = Asteroid::new(circle, mass, direction * speed);
+        let circle = Circle::new(position, rng.gen_range(0.0..6.0), radius, Color::WHITE);
+        let asteroid = Asteroid::new(circle, mass, direction * speed, rng.gen_range(0.5..1.5));
 
         self.asteroids.push(asteroid);
     }

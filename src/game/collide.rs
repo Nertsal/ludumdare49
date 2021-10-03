@@ -11,8 +11,8 @@ pub fn collide_rigid_static(rigid: &mut RigidCircle, collision: Collision) {
 
     // Change ridid circle's velocity
     let bounciness = 0.0;
-    let projection = Vec2::dot(rigid.velocity, collision.normal) * collision.normal;
-    rigid.velocity -= projection * (1.0 + bounciness);
+    let projection = Vec2::dot(rigid.linear_velocity, collision.normal) * collision.normal;
+    rigid.linear_velocity -= projection * (1.0 + bounciness);
 }
 
 /// Performs collision between a rigid and a static circles. Ensure that when cheking for collision,
@@ -24,9 +24,9 @@ pub fn collide_rigid_rigid(rigid: &mut RigidCircle, other: &mut RigidCircle, col
     other.circle.move_delta(-delta);
 
     // Change velocities
-    let relative_velocity = other.velocity - rigid.velocity;
+    let relative_velocity = other.linear_velocity - rigid.linear_velocity;
     let projection = Vec2::dot(relative_velocity, collision.normal) * collision.normal;
     let total_mass = rigid.mass + other.mass;
-    rigid.velocity += projection * other.mass / total_mass;
-    other.velocity -= projection * rigid.mass / total_mass;
+    rigid.linear_velocity += projection * other.mass / total_mass;
+    other.linear_velocity -= projection * rigid.mass / total_mass;
 }

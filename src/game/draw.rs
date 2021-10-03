@@ -6,58 +6,71 @@ impl GameState {
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
         // Draw player
-
         // Rocket
-        let circle = &self.player.rigid_circle.circle;
-        let matrix = Mat3::translate(circle.position)
-            * Mat3::rotate(self.player.rotation)
-            * Mat3::scale_uniform(circle.radius * 2.0)
-            * Mat3::translate(vec2(-0.5, -0.5));
-        self.renderer.draw(
+        self.draw_textured_circle(
             framebuffer,
-            &self.camera,
-            matrix,
-            &self.assets.rocket,
-            Color::WHITE,
+            &self.player.rigid_circle.circle,
+            Some(&self.assets.rocket),
         );
         // Rocket booster
         if self.player.is_accelerating {
-            self.renderer.draw(
+            self.draw_textured_circle(
                 framebuffer,
-                &self.camera,
-                matrix,
-                &self.assets.rocket_booster,
-                Color::WHITE,
+                &self.player.rigid_circle.circle,
+                Some(&self.assets.rocket_booster),
             );
         }
 
         // Draw reactor
-        self.geng.draw_2d().textured_quad(
+        self.draw_textured_circle(
             framebuffer,
-            &self.camera,
-            self.reactor.circle.aabb(),
-            &self.assets.nuclear,
-            self.reactor.health_color(),
+            &self.reactor.circle,
+            Some(&self.assets.nuclear),
         );
 
         // Draw asteroids
         for asteroid in &self.asteroids {
-            self.draw_circle(framebuffer, &asteroid.rigid_circle.circle);
+            self.draw_textured_circle(
+                framebuffer,
+                &asteroid.rigid_circle.circle,
+                Some(&self.assets.asteroid),
+            );
         }
 
         // Draw particles
         for particle in &self.particles {
-            self.draw_circle(framebuffer, &particle.rigid_circle.circle);
+            self.draw_textured_circle(
+                framebuffer,
+                &particle.rigid_circle.circle,
+                Some(&self.assets.asteroid),
+            );
         }
     }
 
-    fn draw_circle(&self, framebuffer: &mut ugli::Framebuffer, circle: &Circle) {
-        self.geng.draw_2d().circle(
-            framebuffer,
-            &self.camera,
-            circle.position,
-            circle.radius,
-            circle.color,
-        );
+    fn draw_textured_circle(
+        &self,
+        framebuffer: &mut ugli::Framebuffer,
+        circle: &Circle,
+        texture: Option<&ugli::Texture>,
+    ) {
+        match texture {
+            Some(texture) => {
+                let matrix = Mat3::translate(circle.position)
+                    * Mat3::rotate(circle.rotation)
+                    * Mat3::scale_uniform(circle.radius * 2.0)
+                    * Mat3::translate(vec2(-0.5, -0.5));
+                self.renderer
+                    .draw(framebuffer, &self.camera, matrix, texture, circle.color);
+            }
+            None => {
+                self.geng.draw_2d().circle(
+                    framebuffer,
+                    &self.camera,
+                    circle.position,
+                    circle.radius,
+                    circle.color,
+                );
+            }
+        }
     }
 }

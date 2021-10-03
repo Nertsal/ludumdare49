@@ -46,6 +46,9 @@ impl GameState {
         if window.is_key_pressed(Key::W) || window.is_key_pressed(Key::Up) {
             linear += 1.0;
         }
+        if window.is_key_pressed(Key::S) || window.is_key_pressed(Key::Down) {
+            linear -= 0.1;
+        }
 
         let mut turn = 0.0;
         if window.is_key_pressed(Key::A) || window.is_key_pressed(Key::Left) {
@@ -122,7 +125,7 @@ impl GameState {
             self.particle_queue.push(asteroid_particles(break_asteroid));
 
             // Prepare
-            let velocity = break_asteroid.rigid_circle.velocity;
+            let velocity = break_asteroid.rigid_circle.linear_velocity;
             let len = velocity.len();
 
             let velocity_norm = if len > 1e-5 { velocity / len } else { velocity };
@@ -136,13 +139,23 @@ impl GameState {
             let mass = break_asteroid.rigid_circle.mass / 2.0;
 
             let new_velocity = (velocity + perpendicular * len) / 2.0;
-            let circle = Circle::new(position, radius - variation, ASTEROID_COLOR);
-            let asteroid = Asteroid::new(circle, mass, new_velocity);
+            let circle = Circle::new(
+                position,
+                rng.gen_range(0.0..6.0),
+                radius - variation,
+                Color::WHITE,
+            );
+            let asteroid = Asteroid::new(circle, mass, new_velocity, rng.gen_range(0.5..1.5));
             new_asteroids.push(asteroid);
 
             let new_velocity = (velocity - perpendicular * len) / 2.0;
-            let circle = Circle::new(position, radius + variation, ASTEROID_COLOR);
-            let asteroid = Asteroid::new(circle, mass, new_velocity);
+            let circle = Circle::new(
+                position,
+                rng.gen_range(0.0..6.0),
+                radius + variation,
+                Color::WHITE,
+            );
+            let asteroid = Asteroid::new(circle, mass, new_velocity, rng.gen_range(0.5..1.5));
             new_asteroids.push(asteroid);
         }
 

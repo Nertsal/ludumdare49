@@ -6,11 +6,17 @@ pub struct Asteroid {
 }
 
 impl Asteroid {
-    pub fn new(circle: Circle, mass: f32, velocity: Vec2<f32>) -> Self {
+    pub fn new(
+        circle: Circle,
+        mass: f32,
+        linear_velocity: Vec2<f32>,
+        rotation_velocity: f32,
+    ) -> Self {
         Self {
             rigid_circle: RigidCircle {
                 circle,
-                velocity,
+                linear_velocity,
+                rotation_velocity,
                 mass,
             },
             break_self: false,

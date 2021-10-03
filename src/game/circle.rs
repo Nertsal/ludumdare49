@@ -2,14 +2,16 @@ use super::*;
 
 pub struct Circle {
     pub position: Vec2<f32>,
+    pub rotation: f32,
     pub radius: f32,
     pub color: Color<f32>,
 }
 
 impl Circle {
-    pub fn new(position: Vec2<f32>, radius: f32, color: Color<f32>) -> Self {
+    pub fn new(position: Vec2<f32>, rotation: f32, radius: f32, color: Color<f32>) -> Self {
         Self {
             position,
+            rotation,
             radius,
             color,
         }
@@ -17,6 +19,19 @@ impl Circle {
 
     pub fn move_delta(&mut self, delta: Vec2<f32>) {
         self.position += delta;
+    }
+
+    pub fn rotate(&mut self, rotation: f32) {
+        self.rotation += rotation;
+
+        // Clamp rotation 0..2 * PI
+        let period = std::f32::consts::PI * 2.0;
+        while self.rotation < 0.0 {
+            self.rotation += period;
+        }
+        while self.rotation >= period {
+            self.rotation -= period
+        }
     }
 
     /// Returns the AABB around itself
@@ -27,7 +42,8 @@ impl Circle {
 
 pub struct RigidCircle {
     pub circle: Circle,
-    pub velocity: Vec2<f32>,
+    pub linear_velocity: Vec2<f32>,
+    pub rotation_velocity: f32,
     pub mass: f32,
 }
 
@@ -36,15 +52,13 @@ impl RigidCircle {
         Self {
             circle,
             mass,
-            velocity: Vec2::ZERO,
+            linear_velocity: Vec2::ZERO,
+            rotation_velocity: 0.0,
         }
     }
 
     pub fn move_delta(&mut self, delta_time: f32) {
-        self.circle.move_delta(self.velocity * delta_time);
-    }
-
-    pub fn accelerate(&mut self, acceleration: Vec2<f32>) {
-        self.velocity += acceleration;
+        self.circle.move_delta(self.linear_velocity * delta_time);
+        self.circle.rotate(self.rotation_velocity * delta_time);
     }
 }

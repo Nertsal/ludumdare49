@@ -14,7 +14,6 @@ pub const PLAYER_LINEAR_ACCELERATION: f32 = 300.0;
 pub const PLAYER_ROTATIONAL_SPEED: f32 = 5.0;
 pub const PLAYER_ROTATIONAL_ACCELERATION: f32 = 100.0;
 pub const PLAYER_MASS: f32 = 10.0;
-pub const PLAYER_COLOR: Color<f32> = Color::RED; // Color::rgb(1.0, 0.0, 0.0);
 
 pub const REACTOR_RADIUS: f32 = 5.0;
 pub const REACTOR_HEALTH: f32 = 1000.0;
@@ -27,7 +26,6 @@ pub const REACTOR_COLOR: Color<f32> = Color {
     a: 1.0,
 };
 
-pub const ASTEROID_COLOR: Color<f32> = Color::GRAY;
 pub const ASTEROID_MASS_MIN: f32 = 50.0;
 pub const ASTEROID_MASS_MAX: f32 = 100.0;
 pub const ASTEROID_RADIUS_MIN: f32 = 2.0;

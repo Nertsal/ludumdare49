@@ -4,8 +4,6 @@ pub struct Player {
     pub rigid_circle: RigidCircle,
 
     /// Rotation starting from up, counter clockwise
-    pub rotation: f32,
-    pub rotational_velocity: f32,
     pub max_rotational_speed: f32,
     pub rotational_acceleration: f32,
 
@@ -25,8 +23,6 @@ impl Player {
         Self {
             rigid_circle,
 
-            rotation: 0.0,
-            rotational_velocity: 0.0,
             max_rotational_speed,
             rotational_acceleration,
 
@@ -38,25 +34,12 @@ impl Player {
 
     /// Returns direction forward
     pub fn forward(&self) -> Vec2<f32> {
-        let angle = self.rotation + std::f32::consts::FRAC_PI_2;
+        let angle = self.rigid_circle.circle.rotation + std::f32::consts::FRAC_PI_2;
         let (sin, cos) = angle.sin_cos();
         vec2(cos, sin)
     }
 
     pub fn move_delta(&mut self, delta_time: f32) {
-        // Rotation
-        self.rotation += self.rotational_velocity * delta_time;
-
-        // Clamp 0..period
-        let period = std::f32::consts::PI * 2.0;
-        while self.rotation < 0.0 {
-            self.rotation += period;
-        }
-        while self.rotation >= period {
-            self.rotation -= period
-        }
-
-        // Position
         self.rigid_circle.move_delta(delta_time);
     }
 
@@ -69,26 +52,26 @@ impl Player {
 
         let forward = self.forward();
         let target_velocity = forward * target_linear_speed;
-        let mut delta = target_velocity - self.rigid_circle.velocity;
+        let mut delta = target_velocity - self.rigid_circle.linear_velocity;
         let max_delta = self.linear_acceleration * delta_time;
         let len = delta.len();
         if len > max_delta {
             delta = delta / len * max_delta;
         }
 
-        self.rigid_circle.accelerate(delta);
+        self.rigid_circle.linear_velocity += delta;
 
         // Rotational
         assert!(target_rotational >= -1.0);
         assert!(target_rotational <= 1.0);
         let target_rotational_speed = self.max_rotational_speed * target_rotational;
 
-        let mut delta = target_rotational_speed - self.rotational_velocity;
+        let mut delta = target_rotational_speed - self.rigid_circle.rotation_velocity;
         let max_delta = self.rotational_acceleration * delta_time;
         if delta.abs() > max_delta {
             delta = delta.signum() * max_delta;
         }
 
-        self.rotational_velocity += delta;
+        self.rigid_circle.rotation_velocity += delta;
     }
 }

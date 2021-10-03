@@ -9,6 +9,7 @@ pub struct Assets {
     pub nuclear: ugli::Texture,
     pub rocket: ugli::Texture,
     pub rocket_booster: ugli::Texture,
+    pub asteroid: ugli::Texture,
 }
 
 fn main() {

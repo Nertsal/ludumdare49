@@ -9,7 +9,8 @@ impl Particle {
         Self {
             rigid_circle: RigidCircle {
                 circle,
-                velocity,
+                linear_velocity: velocity,
+                rotation_velocity: 0.0,
                 mass,
             },
         }
@@ -50,7 +51,7 @@ impl GameState {
             let mut color = particle_group.color_reference;
             color.a = particle_group.color_alpha;
 
-            let circle = Circle::new(particle_group.position, radius, color);
+            let circle = Circle::new(particle_group.position, rng.gen_range(0.0..6.0), radius, color);
 
             let particle = Particle::new(circle, 1.0, velocity);
             self.particles.push(particle);

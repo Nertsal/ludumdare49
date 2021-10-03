@@ -64,7 +64,7 @@ impl GameState {
             border: AABB::ZERO.extend_symmetric(BORDER_SIZE / 2.0),
 
             player: {
-                let circle = Circle::new(Vec2::ZERO, PLAYER_RADIUS, PLAYER_COLOR);
+                let circle = Circle::new(Vec2::ZERO, 0.0, PLAYER_RADIUS, Color::WHITE);
                 Player::new(
                     RigidCircle::new(circle, PLAYER_MASS),
                     PLAYER_LINEAR_SPEED,
@@ -74,7 +74,7 @@ impl GameState {
                 )
             },
             reactor: {
-                let circle = Circle::new(Vec2::ZERO, REACTOR_RADIUS, REACTOR_COLOR);
+                let circle = Circle::new(Vec2::ZERO, 0.0, REACTOR_RADIUS, REACTOR_COLOR);
                 Reactor::new(circle, REACTOR_HEALTH, REACTOR_EXPLODE_COOLDOWN)
             },
             asteroids: vec![],
