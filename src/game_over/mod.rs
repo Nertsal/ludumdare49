@@ -97,6 +97,7 @@ impl geng::State for GameOverState {
                 key: geng::Key::Enter,
             } => {
                 self.transition = true;
+                self.assets.sounds.select.play();
             }
             _ => (),
         }

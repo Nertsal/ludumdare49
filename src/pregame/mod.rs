@@ -106,6 +106,7 @@ impl geng::State for PregameState {
                 key: geng::Key::Enter,
             } => {
                 self.transition = true;
+                self.assets.sounds.select.play();
             }
             _ => (),
         }
