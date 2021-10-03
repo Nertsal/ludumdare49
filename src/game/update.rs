@@ -128,6 +128,9 @@ impl GameState {
             // Particles
             self.particle_queue.push(asteroid_particles(break_asteroid));
 
+            // Sound
+            self.assets.sounds.asteroid_hit.play();
+
             // Prepare
             let velocity = break_asteroid.rigid_circle.linear_velocity;
             let len = velocity.len();

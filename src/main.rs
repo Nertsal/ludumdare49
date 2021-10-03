@@ -26,6 +26,11 @@ impl geng::LoadAsset for Font {
 }
 
 #[derive(geng::Assets)]
+pub struct Sounds {
+    pub asteroid_hit: geng::Sound,
+}
+
+#[derive(geng::Assets)]
 pub struct Assets {
     pub nuclear: ugli::Texture,
     pub rocket: ugli::Texture,
@@ -33,6 +38,7 @@ pub struct Assets {
     pub asteroid: ugli::Texture,
     #[asset(path = "fonts/NF_pixels/fonts/ttf/NFPixels-Regular.ttf")]
     pub font: Font,
+    pub sounds: Sounds,
 }
 
 fn main() {
