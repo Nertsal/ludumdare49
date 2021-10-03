@@ -1,5 +1,6 @@
 use super::*;
 
+#[derive(Clone)]
 pub struct ShopItem {
     pub name: String,
     pub cost: u32,
@@ -8,10 +9,29 @@ pub struct ShopItem {
 
 impl GameState {
     pub fn gen_shop_item(&self) -> ShopItem {
-        ShopItem {
-            name: "Stabilize".to_owned(),
-            cost: 50,
-            effect: Effect::HealReactor { heal: 100.0 },
-        }
+        let possible_items = vec![
+            (
+                ShopItem {
+                    name: "Stabilize".to_owned(),
+                    cost: 50,
+                    effect: Effect::HealReactor { heal: 100.0 },
+                },
+                10.0,
+            ),
+            (
+                ShopItem {
+                    name: "Explode".to_owned(),
+                    cost: 100,
+                    effect: Effect::ExplodeReactor,
+                },
+                5.0,
+            ),
+        ];
+
+        possible_items
+            .choose_weighted(&mut global_rng(), |(_, weight)| *weight)
+            .expect("failed to generate new shop item")
+            .0
+            .clone()
     }
 }

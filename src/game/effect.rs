@@ -1,7 +1,9 @@
 use super::*;
 
+#[derive(Clone)]
 pub enum Effect {
     HealReactor { heal: f32 },
+    ExplodeReactor,
 }
 
 impl GameState {
@@ -9,6 +11,9 @@ impl GameState {
         match effect {
             Effect::HealReactor { heal } => {
                 self.reactor.health += heal;
+            }
+            Effect::ExplodeReactor => {
+                self.explode_reactor();
             }
         }
     }
