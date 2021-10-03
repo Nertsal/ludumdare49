@@ -73,6 +73,7 @@ fn main() {
                 assets.nuclear.set_filter(ugli::Filter::Nearest);
                 assets.rocket.set_filter(ugli::Filter::Nearest);
                 assets.rocket_booster.set_filter(ugli::Filter::Nearest);
+                assets.asteroid.set_filter(ugli::Filter::Nearest);
 
                 pregame::PregameState::new(&geng, &Rc::new(assets))
             }
