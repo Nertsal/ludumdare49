@@ -3,6 +3,7 @@ use super::*;
 pub struct Asteroid {
     pub rigid_circle: RigidCircle,
     pub break_self: bool,
+    pub destroy: bool,
 }
 
 impl Asteroid {
@@ -20,6 +21,7 @@ impl Asteroid {
                 mass,
             },
             break_self: false,
+            destroy: false,
         }
     }
 }

@@ -126,7 +126,7 @@ impl GameState {
                 Collision::circle_circle(&asteroid.rigid_circle.circle, &reactor.circle)
             {
                 collide::collide_rigid_static(&mut asteroid.rigid_circle, collision);
-                asteroid.break_self = true;
+                asteroid.destroy = true;
                 let was_alive = reactor.health > 0.0;
                 let alive = reactor.damage(asteroid.rigid_circle.mass);
                 if was_alive && !alive {
@@ -144,6 +144,15 @@ impl GameState {
     /// Break asteroids
     fn break_asteroids(&mut self) {
         let mut new_asteroids = Vec::new();
+
+        for destroy_asteroid in self.asteroids.iter().filter(|asteroid| asteroid.destroy) {
+            // Particles
+            self.particle_queue
+                .push(asteroid_particles(destroy_asteroid));
+
+            // Sound
+            self.assets.sounds.asteroid_hit.play();
+        }
 
         // Prepare new asteroids
         for break_asteroid in self.asteroids.iter().filter(|asteroid| asteroid.break_self) {
@@ -193,7 +202,8 @@ impl GameState {
         }
 
         // Destroy old asteroids
-        self.asteroids.retain(|asteroid| !asteroid.break_self);
+        self.asteroids
+            .retain(|asteroid| !asteroid.break_self && !asteroid.destroy);
 
         // Spawn new asteroids
         for new_asteroid in new_asteroids {
