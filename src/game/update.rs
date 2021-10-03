@@ -125,7 +125,7 @@ impl GameState {
         }
 
         if game_over {
-            self.assets.sounds.explosion.play();
+            self.reactor.explode_cooldown = 0.0;
             self.explode_reactor();
         }
     }
@@ -219,6 +219,9 @@ impl GameState {
 
     pub fn explode_reactor(&mut self) {
         if self.reactor.explode_cooldown <= 0.0 {
+            // Sound
+            self.assets.sounds.explosion.play();
+
             // Do something with the reactor
             self.reactor.explode_cooldown = self.reactor.explode_delay;
 
@@ -226,6 +229,9 @@ impl GameState {
             for asteroid in self.asteroids.drain(..) {
                 self.particle_queue.push(asteroid_particles(&asteroid));
             }
+
+            // Reset spawn timer
+            self.spawn_timer = self.spawn_delay;
         }
     }
 

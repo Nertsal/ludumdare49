@@ -68,7 +68,12 @@ impl GameState {
             transition_delay: 3.0,
 
             player: {
-                let circle = Circle::new(Vec2::ZERO, 0.0, PLAYER_RADIUS, Color::WHITE);
+                let circle = Circle::new(
+                    vec2(0.0, REACTOR_RADIUS + PLAYER_RADIUS),
+                    0.0,
+                    PLAYER_RADIUS,
+                    Color::WHITE,
+                );
                 Player::new(
                     RigidCircle::new(circle, PLAYER_MASS),
                     PLAYER_LINEAR_SPEED,
