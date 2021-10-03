@@ -29,7 +29,6 @@ impl geng::State for PregameState {
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
         let framebuffer_size = framebuffer.size().map(|x| x as f32);
-        let center = framebuffer_size / 2.0;
 
         let reactor_pos = vec2(15.0, -5.0);
 
@@ -51,11 +50,11 @@ impl geng::State for PregameState {
         let font = &self.assets.font;
         font.draw(
             framebuffer,
-            &geng::PixelPerfectCamera,
+            &self.camera,
             "Ludum Dare 49 - Unstable",
-            vec2(center.x, 5.0),
+            vec2(0.0, -24.5),
             geng::TextAlign::CENTER,
-            24.0,
+            2.0,
             Color::WHITE,
         );
 
