@@ -3,6 +3,7 @@ use super::*;
 #[derive(Clone)]
 pub struct ShopItem {
     pub name: String,
+    pub description: String,
     pub cost: u32,
     pub effect: Effect,
 }
@@ -13,6 +14,7 @@ impl GameState {
             (
                 ShopItem {
                     name: "Stabilize".to_owned(),
+                    description: "Is your reactor\nunstable?\nStabilize it now!".to_owned(),
                     cost: 50,
                     effect: Effect::HealReactor { heal: 100.0 },
                 },
@@ -21,6 +23,8 @@ impl GameState {
             (
                 ShopItem {
                     name: "Explode".to_owned(),
+                    description: "Explode the reactor\nto clear the screen\nfrom asteroids."
+                        .to_owned(),
                     cost: 100,
                     effect: Effect::ExplodeReactor,
                 },

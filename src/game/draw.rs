@@ -214,6 +214,17 @@ impl GameState {
             Color::WHITE,
         );
 
+        // Description
+        self.assets.font.draw(
+            framebuffer,
+            &self.camera,
+            &shop_item.description,
+            vec2(shop_item_aabb.center().x, shop_item_aabb.y_min + 10.0),
+            geng::TextAlign::CENTER,
+            2.0,
+            Color::WHITE,
+        );
+
         // Cost
         let color = if can_afford { Color::WHITE } else { Color::RED };
         self.assets.font.draw(
