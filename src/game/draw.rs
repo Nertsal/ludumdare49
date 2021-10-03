@@ -2,7 +2,8 @@ use super::*;
 
 impl GameState {
     pub fn draw_impl(&mut self, framebuffer: &mut ugli::Framebuffer) {
-        self.framebuffer_size = framebuffer.size().map(|x| x as f32);
+        let framebuffer_size = framebuffer.size().map(|x| x as f32);
+        self.framebuffer_size = framebuffer_size;
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
         // Draw player
@@ -45,6 +46,17 @@ impl GameState {
                 Some(&self.assets.asteroid),
             );
         }
+
+        // Score
+        self.assets.font.draw(
+            framebuffer,
+            &geng::PixelPerfectCamera,
+            &format!("SCORE: {}", self.score),
+            vec2(20.0, framebuffer_size.y - 50.0),
+            geng::TextAlign::LEFT,
+            40.0,
+            Color::WHITE,
+        )
     }
 
     fn draw_textured_circle(
