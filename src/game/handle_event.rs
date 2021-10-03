@@ -60,6 +60,8 @@ impl GameState {
                     let purchase = std::mem::replace(&mut self.shop_items[select], new_item);
                     self.money -= purchase.cost;
                     self.apply_effect(purchase.effect);
+                } else {
+                    self.assets.sounds.reject.play();
                 }
             }
             None => (),

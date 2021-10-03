@@ -32,6 +32,7 @@ pub struct Sounds {
     pub select: geng::Sound,
     pub item_select: geng::Sound,
     pub purchase: geng::Sound,
+    pub reject: geng::Sound,
 }
 
 #[derive(geng::Assets)]
