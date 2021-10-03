@@ -87,7 +87,7 @@ impl GameState {
         self.assets.font.draw(
             framebuffer,
             &self.camera,
-            &format!("Money: {}", self.money),
+            &format!("Dust: {}", self.money),
             vec2(camera_view.x_min + 3.0, camera_view.y_max - 15.0),
             geng::TextAlign::LEFT,
             4.0,
