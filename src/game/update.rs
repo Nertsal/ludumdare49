@@ -27,6 +27,7 @@ impl GameState {
     }
 
     fn update_reactor(&mut self, delta_time: f32) {
+        self.reactor.circle.color = self.reactor.health_color();
         if self.reactor.explode_cooldown > 0.0 {
             self.reactor.explode_cooldown -= delta_time;
         }
