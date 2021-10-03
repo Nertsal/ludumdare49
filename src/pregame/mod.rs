@@ -24,6 +24,8 @@ impl PregameState {
 
 impl geng::State for PregameState {
     fn draw(&mut self, framebuffer: &mut ugli::Framebuffer) {
+        ugli::clear(framebuffer, Some(Color::BLACK), None);
+
         let framebuffer_size = framebuffer.size().map(|x| x as f32);
         let center = framebuffer_size / 2.0;
 
@@ -44,7 +46,8 @@ impl geng::State for PregameState {
         );
 
         // Ludum Dare 49 - Unstable
-        self.geng.default_font().draw(
+        let font = &self.assets.font;
+        font.draw(
             framebuffer,
             &geng::PixelPerfectCamera,
             "Ludum Dare 49 - Unstable",
@@ -55,7 +58,7 @@ impl geng::State for PregameState {
         );
 
         // Unstable Asteroids
-        self.geng.default_font().draw(
+        font.draw(
             framebuffer,
             &self.camera,
             "Unstable Asteroids",
@@ -66,7 +69,7 @@ impl geng::State for PregameState {
         );
 
         // PRESS ENTER TO STABILIZE
-        self.geng.default_font().draw(
+        font.draw(
             framebuffer,
             &self.camera,
             "PRESS ENTER TO",
@@ -75,7 +78,7 @@ impl geng::State for PregameState {
             5.0,
             Color::WHITE,
         );
-        self.geng.default_font().draw(
+        font.draw(
             framebuffer,
             &self.camera,
             "STABILIZE",
