@@ -31,6 +31,9 @@ impl GameState {
         if self.reactor.explode_cooldown > 0.0 {
             self.reactor.explode_cooldown -= delta_time;
         }
+        if self.reactor.health <= 0.0 {
+            self.transition_delay -= delta_time;
+        }
     }
 
     fn update_particles(&mut self, delta_time: f32) {
@@ -104,6 +107,7 @@ impl GameState {
         }
 
         // Reactor - Asteroid
+        let mut game_over = false;
         let reactor = &mut self.reactor;
         for asteroid in &mut self.asteroids {
             if let Some(collision) =
@@ -111,8 +115,18 @@ impl GameState {
             {
                 collide::collide_rigid_static(&mut asteroid.rigid_circle, collision);
                 asteroid.break_self = true;
-                reactor.damage(asteroid.rigid_circle.mass);
+                let was_alive = reactor.health > 0.0;
+                let alive = reactor.damage(asteroid.rigid_circle.mass);
+                if was_alive && !alive {
+                    // Game over
+                    game_over = true;
+                }
             }
+        }
+
+        if game_over {
+            self.assets.sounds.explosion.play();
+            self.explode_reactor();
         }
     }
 

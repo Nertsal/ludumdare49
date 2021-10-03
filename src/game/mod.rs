@@ -34,6 +34,7 @@ pub struct GameState {
     score: u32,
     difficulty: f32,
     border: AABB<f32>,
+    transition_delay: f32,
 
     player: Player,
     reactor: Reactor,
@@ -64,6 +65,7 @@ impl GameState {
             score: 0,
             difficulty: 0.0,
             border: AABB::ZERO.extend_symmetric(BORDER_SIZE / 2.0),
+            transition_delay: 3.0,
 
             player: {
                 let circle = Circle::new(Vec2::ZERO, 0.0, PLAYER_RADIUS, Color::WHITE);
@@ -105,7 +107,7 @@ impl geng::State for GameState {
     }
 
     fn transition(&mut self) -> Option<geng::Transition> {
-        if self.reactor.health > 0.0 {
+        if self.transition_delay > 0.0 {
             return None;
         }
 

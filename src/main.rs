@@ -29,6 +29,7 @@ impl geng::LoadAsset for Font {
 pub struct Sounds {
     pub asteroid_hit: geng::Sound,
     pub select: geng::Sound,
+    pub explosion: geng::Sound,
 }
 
 #[derive(geng::Assets)]
