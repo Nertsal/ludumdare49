@@ -10,6 +10,11 @@ pub struct Player {
     pub max_linear_speed: f32,
     pub linear_acceleration: f32,
     pub is_accelerating: bool,
+
+    pub current_keyframe: usize,
+    pub keyframe_delay: f32,
+    pub keyframe_timer: f32,
+    pub booster_keyframes: Vec<Rc<ugli::Texture>>,
 }
 
 impl Player {
@@ -19,6 +24,7 @@ impl Player {
         linear_acceleration: f32,
         max_rotational_speed: f32,
         rotational_acceleration: f32,
+        booster_keyframes: &Vec<Rc<ugli::Texture>>,
     ) -> Self {
         Self {
             rigid_circle,
@@ -29,6 +35,23 @@ impl Player {
             max_linear_speed,
             linear_acceleration,
             is_accelerating: false,
+
+            current_keyframe: 0,
+            keyframe_delay: PLAYER_KEYFRAME_DELAY,
+            keyframe_timer: PLAYER_KEYFRAME_DELAY,
+            booster_keyframes: booster_keyframes.clone(),
+        }
+    }
+
+    pub fn update(&mut self, delta_time: f32) {
+        self.keyframe_timer -= delta_time;
+        if self.keyframe_timer <= 0.0 {
+            // Next keyframe
+            self.keyframe_timer = self.keyframe_delay;
+            self.current_keyframe += 1;
+            if self.current_keyframe >= self.booster_keyframes.len() {
+                self.current_keyframe = 0;
+            }
         }
     }
 

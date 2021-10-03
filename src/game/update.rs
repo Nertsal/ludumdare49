@@ -8,6 +8,7 @@ impl GameState {
 
         self.scale_difficulty(delta_time);
 
+        self.update_player(delta_time);
         self.update_reactor(delta_time);
         self.update_particles(delta_time);
 
@@ -39,6 +40,10 @@ impl GameState {
         self.difficulty += delta_time * DIFFICULTY_SCALE;
         self.spawn_delay =
             (START_SPAWN_DELAY - self.difficulty * SPAWN_DELAY_SCALE).max(SPAWN_DELAY_MIN);
+    }
+
+    fn update_player(&mut self, delta_time: f32) {
+        self.player.update(delta_time);
     }
 
     fn update_reactor(&mut self, delta_time: f32) {

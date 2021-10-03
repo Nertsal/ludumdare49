@@ -92,6 +92,7 @@ impl GameState {
                     PLAYER_LINEAR_ACCELERATION,
                     PLAYER_ROTATIONAL_SPEED,
                     PLAYER_ROTATIONAL_ACCELERATION,
+                    &assets.sprites.rocket_boosters,
                 )
             },
             reactor: {

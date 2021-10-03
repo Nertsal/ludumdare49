@@ -20,7 +20,7 @@ impl GameState {
             self.draw_textured_circle(
                 framebuffer,
                 &self.player.rigid_circle.circle,
-                Some(&self.assets.sprites.rocket_booster),
+                Some(&self.player.booster_keyframes[self.player.current_keyframe]),
             );
         }
 

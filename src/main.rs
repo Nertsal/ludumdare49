@@ -39,7 +39,8 @@ pub struct Sounds {
 pub struct Sprites {
     pub nuclear: ugli::Texture,
     pub rocket: ugli::Texture,
-    pub rocket_booster: ugli::Texture,
+    #[asset(path = "rocket_booster/*.png", range = "1..=3")]
+    pub rocket_boosters: Vec<Rc<ugli::Texture>>,
     #[asset(path = "asteroid/*.png", range = "1..=3")]
     pub asteroids: Vec<Rc<ugli::Texture>>,
 }
@@ -56,7 +57,11 @@ impl Sprites {
     fn init(&mut self) {
         self.nuclear.set_filter(ugli::Filter::Nearest);
         self.rocket.set_filter(ugli::Filter::Nearest);
-        self.rocket_booster.set_filter(ugli::Filter::Nearest);
+        self.rocket_boosters.iter_mut().for_each(|texture| {
+            Rc::get_mut(texture)
+                .unwrap()
+                .set_filter(ugli::Filter::Nearest)
+        });
         self.asteroids.iter_mut().for_each(|texture| {
             Rc::get_mut(texture)
                 .unwrap()
