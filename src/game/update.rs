@@ -3,6 +3,9 @@ use super::*;
 
 impl GameState {
     pub fn update_impl(&mut self, delta_time: f32) {
+        self.time_scale(delta_time);
+        let delta_time = delta_time * self.time_scale;
+
         self.scale_difficulty(delta_time);
 
         self.update_reactor(delta_time);
@@ -20,6 +23,18 @@ impl GameState {
         self.spawn_particles();
     }
 
+    fn time_scale(&mut self, delta_time: f32) {
+        let target_scale = if self.is_shop_open { 0.0 } else { 1.0 };
+
+        // Interpolate towards target scale
+        let mut delta = target_scale - self.time_scale;
+        let max_delta = delta_time / TIME_SCALE_CHANGE_TIME;
+        if delta.abs() > max_delta {
+            delta = delta.signum() * max_delta;
+        }
+        self.time_scale += delta;
+    }
+
     fn scale_difficulty(&mut self, delta_time: f32) {
         self.difficulty += delta_time * DIFFICULTY_SCALE;
         self.spawn_delay =
@@ -28,9 +43,6 @@ impl GameState {
 
     fn update_reactor(&mut self, delta_time: f32) {
         self.reactor.circle.color = self.reactor.health_color();
-        if self.reactor.explode_cooldown > 0.0 {
-            self.reactor.explode_cooldown -= delta_time;
-        }
         if self.reactor.health <= 0.0 {
             self.transition_delay -= delta_time;
         }
@@ -125,7 +137,6 @@ impl GameState {
         }
 
         if game_over {
-            self.reactor.explode_cooldown = 0.0;
             self.explode_reactor();
         }
     }
@@ -138,6 +149,7 @@ impl GameState {
         for break_asteroid in self.asteroids.iter().filter(|asteroid| asteroid.break_self) {
             // Score
             self.score += 1;
+            self.money += 1;
 
             // Particles
             self.particle_queue.push(asteroid_particles(break_asteroid));
@@ -218,21 +230,16 @@ impl GameState {
     }
 
     pub fn explode_reactor(&mut self) {
-        if self.reactor.explode_cooldown <= 0.0 {
-            // Sound
-            self.assets.sounds.explosion.play();
+        // Sound
+        self.assets.sounds.explosion.play();
 
-            // Do something with the reactor
-            self.reactor.explode_cooldown = self.reactor.explode_delay;
-
-            // Explode all asteroids
-            for asteroid in self.asteroids.drain(..) {
-                self.particle_queue.push(asteroid_particles(&asteroid));
-            }
-
-            // Reset spawn timer
-            self.spawn_timer = self.spawn_delay;
+        // Explode all asteroids
+        for asteroid in self.asteroids.drain(..) {
+            self.particle_queue.push(asteroid_particles(&asteroid));
         }
+
+        // Reset spawn timer
+        self.spawn_timer = self.spawn_delay;
     }
 
     fn spawn_particles(&mut self) {

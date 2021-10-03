@@ -6,19 +6,23 @@ mod collide;
 mod collision;
 mod constants;
 mod draw;
+mod effect;
 mod handle_event;
 mod particle;
 mod player;
 mod reactor;
+mod shop_item;
 mod spawn;
 mod update;
 
 use asteroid::*;
 use circle::*;
 use constants::*;
+use effect::*;
 use particle::*;
 use player::*;
 use reactor::*;
+use shop_item::*;
 
 use crate::{renderer::Renderer, Assets};
 
@@ -31,6 +35,7 @@ pub struct GameState {
     framebuffer_size: Vec2<f32>,
 
     // Actual game data
+    time_scale: f32,
     score: u32,
     difficulty: f32,
     border: AABB<f32>,
@@ -45,11 +50,17 @@ pub struct GameState {
 
     spawn_delay: f32,
     spawn_timer: f32,
+
+    money: u32,
+    is_shop_open: bool,
+    shop_item_count: usize,
+    shop_items: Vec<ShopItem>,
+    shop_item_select: Option<usize>,
 }
 
 impl GameState {
     pub fn new(geng: &Geng, assets: &Rc<Assets>) -> Self {
-        Self {
+        let mut state = Self {
             // Usual engine things
             geng: geng.clone(),
             assets: assets.clone(),
@@ -62,6 +73,7 @@ impl GameState {
             framebuffer_size: vec2(1.0, 1.0),
 
             // Actual game data
+            time_scale: 1.0,
             score: 0,
             difficulty: 0.0,
             border: AABB::ZERO.extend_symmetric(BORDER_SIZE / 2.0),
@@ -84,7 +96,7 @@ impl GameState {
             },
             reactor: {
                 let circle = Circle::new(Vec2::ZERO, 0.0, REACTOR_RADIUS, REACTOR_COLOR);
-                Reactor::new(circle, REACTOR_HEALTH, REACTOR_EXPLODE_COOLDOWN)
+                Reactor::new(circle, REACTOR_HEALTH)
             },
             asteroids: vec![],
 
@@ -93,7 +105,18 @@ impl GameState {
 
             spawn_delay: START_SPAWN_DELAY,
             spawn_timer: START_SPAWN_DELAY,
+
+            money: 0,
+            is_shop_open: false,
+            shop_item_count: 3,
+            shop_items: vec![],
+            shop_item_select: None,
+        };
+        for _ in 0..state.shop_item_count {
+            let shop_item = state.gen_shop_item();
+            state.shop_items.push(shop_item);
         }
+        state
     }
 }
 

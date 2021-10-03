@@ -4,19 +4,15 @@ pub struct Reactor {
     pub circle: Circle,
     pub max_health: f32,
     pub health: f32,
-    pub explode_delay: f32,
-    pub explode_cooldown: f32,
 }
 
 impl Reactor {
-    pub fn new(circle: Circle, max_health: f32, explode_delay: f32) -> Self {
+    pub fn new(circle: Circle, max_health: f32) -> Self {
         assert!(max_health > 0.0);
         Self {
             circle,
             max_health,
             health: max_health,
-            explode_delay,
-            explode_cooldown: explode_delay,
         }
     }
 

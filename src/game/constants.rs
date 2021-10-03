@@ -1,5 +1,7 @@
 use geng::prelude::{vec2, Color, Vec2};
 
+pub const TIME_SCALE_CHANGE_TIME: f32 = 0.5;
+
 pub const DIFFICULTY_SCALE: f32 = 1.0;
 
 pub const START_SPAWN_DELAY: f32 = 5.0;
@@ -17,7 +19,6 @@ pub const PLAYER_MASS: f32 = 10.0;
 
 pub const REACTOR_RADIUS: f32 = 5.0;
 pub const REACTOR_HEALTH: f32 = 1000.0;
-pub const REACTOR_EXPLODE_COOLDOWN: f32 = 30.0;
 pub const REACTOR_HEALTH_COLOR: Color<f32> = Color::GREEN;
 pub const REACTOR_COLOR: Color<f32> = Color {
     r: 0.0,
@@ -39,3 +40,6 @@ pub const ASTEROID_BREAK_RADIUS_VARIATION: f32 = 0.5;
 
 pub const PARTICLE_ALPHA: f32 = 0.5;
 pub const PARTICLE_DECAY_TIME: f32 = 5.0;
+
+pub const SHOP_ITEM_COLOR: Color<f32> = Color::WHITE;
+pub const SHOP_ITEM_SELECTED_COLOR: Color<f32> = Color::YELLOW;
