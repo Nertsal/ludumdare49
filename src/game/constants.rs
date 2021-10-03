@@ -11,8 +11,8 @@ pub const BORDER_SIZE: Vec2<f32> = vec2(160.0, 90.0);
 pub const PLAYER_RADIUS: f32 = 2.5;
 pub const PLAYER_LINEAR_SPEED: f32 = 50.0;
 pub const PLAYER_LINEAR_ACCELERATION: f32 = 300.0;
-pub const PLAYER_ROTATIONAL_SPEED: f32 = 1.0;
-pub const PLAYER_ROTATIONAL_ACCELERATION: f32 = 5.0;
+pub const PLAYER_ROTATIONAL_SPEED: f32 = 5.0;
+pub const PLAYER_ROTATIONAL_ACCELERATION: f32 = 100.0;
 pub const PLAYER_MASS: f32 = 10.0;
 pub const PLAYER_COLOR: Color<f32> = Color::RED; // Color::rgb(1.0, 0.0, 0.0);
 

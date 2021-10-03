@@ -45,7 +45,6 @@ impl Player {
 
     pub fn move_delta(&mut self, delta_time: f32) {
         // Rotation
-        self.rotational_velocity += self.rotational_acceleration * delta_time;
         self.rotation += self.rotational_velocity * delta_time;
 
         // Clamp 0..period
@@ -63,7 +62,7 @@ impl Player {
 
     pub fn control(&mut self, target_linear: f32, target_rotational: f32, delta_time: f32) {
         // Linear
-        assert!(target_linear >= 0.0);
+        assert!(target_linear >= -0.1);
         assert!(target_linear <= 1.0);
         let target_linear_speed = self.max_linear_speed * target_linear;
         self.is_accelerating = target_linear_speed > 0.0;
@@ -81,7 +80,7 @@ impl Player {
 
         // Rotational
         assert!(target_rotational >= -1.0);
-        assert!(target_linear <= 1.0);
+        assert!(target_rotational <= 1.0);
         let target_rotational_speed = self.max_rotational_speed * target_rotational;
 
         let mut delta = target_rotational_speed - self.rotational_velocity;
