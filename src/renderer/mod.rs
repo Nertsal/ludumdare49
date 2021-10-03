@@ -36,6 +36,7 @@ impl Renderer {
                 .unwrap(),
         }
     }
+    
     pub fn draw(
         &self,
         framebuffer: &mut ugli::Framebuffer,

@@ -10,8 +10,8 @@ impl GameState {
         // Rocket
         let circle = &self.player.rigid_circle.circle;
         let matrix = Mat3::translate(circle.position)
-            // * Mat3::rotate(self.player.rotation)
-            // * Mat3::scale_uniform(circle.radius)
+            * Mat3::rotate(self.player.rotation)
+            * Mat3::scale_uniform(circle.radius * 2.0)
             * Mat3::translate(vec2(-0.5, -0.5));
         self.renderer.draw(
             framebuffer,
@@ -20,33 +20,25 @@ impl GameState {
             &self.assets.rocket,
             Color::WHITE,
         );
-        // self.geng.draw_2d().textured_quad(
-        //     framebuffer,
-        //     &self.camera,
-        //     self.player.rigid_circle.circle.aabb(),
-        //     &self.assets.rocket,
-        //     Color::WHITE,
-        // );
-        // // Rocket booster
-        // if self.player.is_accelerating {
-        //     let circle = &self.player.rigid_circle.circle;
-        //     self.geng.draw_2d().textured_quad(
-        //         framebuffer,
-        //         &self.camera,
-        //         circle.aabb(),
-        //         &self.assets.rocket_booster,
-        //         Color::WHITE,
-        //     );
-        // }
+        // Rocket booster
+        if self.player.is_accelerating {
+            self.renderer.draw(
+                framebuffer,
+                &self.camera,
+                matrix,
+                &self.assets.rocket_booster,
+                Color::WHITE,
+            );
+        }
 
         // Draw reactor
-        // self.geng.draw_2d().textured_quad(
-        //     framebuffer,
-        //     &self.camera,
-        //     self.reactor.circle.aabb(),
-        //     &self.assets.nuclear,
-        //     self.reactor.health_color(),
-        // );
+        self.geng.draw_2d().textured_quad(
+            framebuffer,
+            &self.camera,
+            self.reactor.circle.aabb(),
+            &self.assets.nuclear,
+            self.reactor.health_color(),
+        );
 
         // Draw asteroids
         for asteroid in &self.asteroids {
