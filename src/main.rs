@@ -2,6 +2,7 @@ use geng::prelude::*;
 
 mod game;
 mod pregame;
+mod renderer;
 
 #[derive(geng::Assets)]
 pub struct Assets {

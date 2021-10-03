@@ -44,24 +44,6 @@ impl RigidCircle {
         self.circle.move_delta(self.velocity * delta_time);
     }
 
-    /// Accelerate towards target velocity
-    pub fn target_velocity(
-        &mut self,
-        target_velocity: Vec2<f32>,
-        acceleration: f32,
-        delta_time: f32,
-    ) {
-        let max_accel = acceleration * delta_time;
-
-        let mut delta = target_velocity - self.velocity;
-        let delta_len = delta.len();
-        if delta_len > max_accel {
-            delta = delta / delta_len * max_accel;
-        }
-
-        self.accelerate(delta);
-    }
-
     pub fn accelerate(&mut self, acceleration: Vec2<f32>) {
         self.velocity += acceleration;
     }

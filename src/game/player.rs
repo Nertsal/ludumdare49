@@ -2,34 +2,94 @@ use super::*;
 
 pub struct Player {
     pub rigid_circle: RigidCircle,
-    pub max_speed: f32,
-    pub acceleration: f32,
+
+    /// Rotation starting from up, counter clockwise
+    pub rotation: f32,
+    pub rotational_velocity: f32,
+    pub max_rotational_speed: f32,
+    pub rotational_acceleration: f32,
+
+    pub max_linear_speed: f32,
+    pub linear_acceleration: f32,
     pub is_accelerating: bool,
 }
 
 impl Player {
-    pub fn new(rigid_circle: RigidCircle, max_speed: f32, acceleration: f32) -> Self {
+    pub fn new(
+        rigid_circle: RigidCircle,
+        max_linear_speed: f32,
+        linear_acceleration: f32,
+        max_rotational_speed: f32,
+        rotational_acceleration: f32,
+    ) -> Self {
         Self {
             rigid_circle,
-            max_speed,
-            acceleration,
+
+            rotation: 0.0,
+            rotational_velocity: 0.0,
+            max_rotational_speed,
+            rotational_acceleration,
+
+            max_linear_speed,
+            linear_acceleration,
             is_accelerating: false,
         }
     }
 
-    pub fn target_velocity_direction(&mut self, direction: Vec2<f32>, delta_time: f32) {
-        // Clamp length
-        let len = direction.len();
-        let target_direction = if len > 1.0 {
-            direction / len
-        } else {
-            direction
-        };
+    /// Returns direction forward
+    pub fn forward(&self) -> Vec2<f32> {
+        let angle = self.rotation + std::f32::consts::FRAC_PI_2;
+        let (sin, cos) = angle.sin_cos();
+        vec2(cos, sin)
+    }
 
-        self.is_accelerating = len > 0.0;
+    pub fn move_delta(&mut self, delta_time: f32) {
+        // Rotation
+        self.rotational_velocity += self.rotational_acceleration * delta_time;
+        self.rotation += self.rotational_velocity * delta_time;
 
-        let target_speed = target_direction * self.max_speed;
-        self.rigid_circle
-            .target_velocity(target_speed, self.acceleration, delta_time);
+        // Clamp 0..period
+        let period = std::f32::consts::PI * 2.0;
+        while self.rotation < 0.0 {
+            self.rotation += period;
+        }
+        while self.rotation >= period {
+            self.rotation -= period
+        }
+
+        // Position
+        self.rigid_circle.move_delta(delta_time);
+    }
+
+    pub fn control(&mut self, target_linear: f32, target_rotational: f32, delta_time: f32) {
+        // Linear
+        assert!(target_linear >= 0.0);
+        assert!(target_linear <= 1.0);
+        let target_linear_speed = self.max_linear_speed * target_linear;
+        self.is_accelerating = target_linear_speed > 0.0;
+
+        let forward = self.forward();
+        let target_velocity = forward * target_linear_speed;
+        let mut delta = target_velocity - self.rigid_circle.velocity;
+        let max_delta = self.linear_acceleration * delta_time;
+        let len = delta.len();
+        if len > max_delta {
+            delta = delta / len * max_delta;
+        }
+
+        self.rigid_circle.accelerate(delta);
+
+        // Rotational
+        assert!(target_rotational >= -1.0);
+        assert!(target_linear <= 1.0);
+        let target_rotational_speed = self.max_rotational_speed * target_rotational;
+
+        let mut delta = target_rotational_speed - self.rotational_velocity;
+        let max_delta = self.rotational_acceleration * delta_time;
+        if delta.abs() > max_delta {
+            delta = delta.signum() * max_delta;
+        }
+
+        self.rotational_velocity += delta;
     }
 }

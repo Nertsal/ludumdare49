@@ -40,29 +40,27 @@ impl GameState {
 
     fn control_player(&mut self, delta_time: f32) {
         use geng::Key;
-
         let window = self.geng.window();
 
-        let mut direction = Vec2::ZERO;
-        if window.is_key_pressed(Key::A) {
-            direction += vec2(-1.0, 0.0);
-        }
-        if window.is_key_pressed(Key::D) {
-            direction += vec2(1.0, 0.0);
-        }
-        if window.is_key_pressed(Key::S) {
-            direction += vec2(0.0, -1.0);
-        }
-        if window.is_key_pressed(Key::W) {
-            direction += vec2(0.0, 1.0);
+        let mut linear = 0.0;
+        if window.is_key_pressed(Key::W) || window.is_key_pressed(Key::Up) {
+            linear += 1.0;
         }
 
-        self.player.target_velocity_direction(direction, delta_time);
+        let mut turn = 0.0;
+        if window.is_key_pressed(Key::A) || window.is_key_pressed(Key::Left) {
+            turn += 1.0;
+        }
+        if window.is_key_pressed(Key::D) || window.is_key_pressed(Key::Right) {
+            turn -= 1.0;
+        }
+
+        self.player.control(linear, turn, delta_time);
     }
 
     fn movement(&mut self, delta_time: f32) {
         // Move player
-        self.player.rigid_circle.move_delta(delta_time);
+        self.player.move_delta(delta_time);
 
         // Move asteroids
         for asteroid in &mut self.asteroids {

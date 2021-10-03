@@ -20,12 +20,13 @@ use particle::*;
 use player::*;
 use reactor::*;
 
-use crate::Assets;
+use crate::{renderer::Renderer, Assets};
 
 pub struct GameState {
     // Usual engine things
     geng: Geng,
     assets: Rc<Assets>,
+    renderer: Renderer,
     camera: geng::Camera2d,
     framebuffer_size: Vec2<f32>,
 
@@ -50,6 +51,7 @@ impl GameState {
             // Usual engine things
             geng: geng.clone(),
             assets: assets.clone(),
+            renderer: Renderer::new(geng),
             camera: geng::Camera2d {
                 center: Vec2::ZERO,
                 rotation: 0.0,
@@ -65,8 +67,10 @@ impl GameState {
                 let circle = Circle::new(Vec2::ZERO, PLAYER_RADIUS, PLAYER_COLOR);
                 Player::new(
                     RigidCircle::new(circle, PLAYER_MASS),
-                    PLAYER_SPEED,
-                    PLAYER_ACCELERATION,
+                    PLAYER_LINEAR_SPEED,
+                    PLAYER_LINEAR_ACCELERATION,
+                    PLAYER_ROTATIONAL_SPEED,
+                    PLAYER_ROTATIONAL_ACCELERATION,
                 )
             },
             reactor: {

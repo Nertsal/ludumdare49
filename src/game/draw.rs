@@ -6,32 +6,47 @@ impl GameState {
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
         // Draw player
-        self.geng.draw_2d().textured_quad(
+
+        // Rocket
+        let circle = &self.player.rigid_circle.circle;
+        let matrix = Mat3::translate(circle.position)
+            // * Mat3::rotate(self.player.rotation)
+            // * Mat3::scale_uniform(circle.radius)
+            * Mat3::translate(vec2(-0.5, -0.5));
+        self.renderer.draw(
             framebuffer,
             &self.camera,
-            self.player.rigid_circle.circle.aabb(),
+            matrix,
             &self.assets.rocket,
             Color::WHITE,
         );
-        if self.player.is_accelerating {
-            self.geng.draw_2d().textured_quad(
-                framebuffer,
-                &self.camera,
-                self.player.rigid_circle.circle.aabb(),
-                &self.assets.rocket_booster,
-                Color::WHITE,
-            );
-        }
-        // self.draw_circle(framebuffer, &self.player.rigid_circle.circle);
+        // self.geng.draw_2d().textured_quad(
+        //     framebuffer,
+        //     &self.camera,
+        //     self.player.rigid_circle.circle.aabb(),
+        //     &self.assets.rocket,
+        //     Color::WHITE,
+        // );
+        // // Rocket booster
+        // if self.player.is_accelerating {
+        //     let circle = &self.player.rigid_circle.circle;
+        //     self.geng.draw_2d().textured_quad(
+        //         framebuffer,
+        //         &self.camera,
+        //         circle.aabb(),
+        //         &self.assets.rocket_booster,
+        //         Color::WHITE,
+        //     );
+        // }
 
         // Draw reactor
-        self.geng.draw_2d().textured_quad(
-            framebuffer,
-            &self.camera,
-            self.reactor.circle.aabb(),
-            &self.assets.nuclear,
-            self.reactor.health_color(),
-        );
+        // self.geng.draw_2d().textured_quad(
+        //     framebuffer,
+        //     &self.camera,
+        //     self.reactor.circle.aabb(),
+        //     &self.assets.nuclear,
+        //     self.reactor.health_color(),
+        // );
 
         // Draw asteroids
         for asteroid in &self.asteroids {
