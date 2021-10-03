@@ -24,7 +24,15 @@ impl GameOverState {
             },
 
             score,
-            best_score: AutoSave::load("best_score.json"),
+            best_score: {
+                // Update best score
+                let mut best_score = AutoSave::load("best_score.json");
+                if score > *best_score {
+                    *best_score = score;
+                    best_score.save();
+                }
+                best_score
+            },
             transition: false,
         }
     }
@@ -106,12 +114,6 @@ impl geng::State for GameOverState {
     fn transition(&mut self) -> Option<geng::Transition> {
         if !self.transition {
             return None;
-        }
-
-        // Update best score
-        if self.score > *self.best_score {
-            *self.best_score = self.score;
-            self.best_score.save();
         }
 
         Some(geng::Transition::Pop)
