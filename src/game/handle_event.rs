@@ -31,6 +31,7 @@ impl GameState {
     }
 
     fn shop_item_select(&mut self, delta: isize) {
+        self.assets.sounds.item_select.play();
         match self.shop_item_select {
             Some(current) => {
                 let mut current = current as isize + delta;
