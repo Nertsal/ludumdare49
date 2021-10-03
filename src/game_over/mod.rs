@@ -2,15 +2,18 @@ use geng::prelude::*;
 
 use crate::Assets;
 
-pub struct PregameState {
+pub struct GameOverState {
     geng: Geng,
     assets: Rc<Assets>,
     camera: geng::Camera2d,
+
+    score: u32,
+    best_score: AutoSave<u32>,
     transition: bool,
 }
 
-impl PregameState {
-    pub fn new(geng: &Geng, assets: &Rc<Assets>) -> Self {
+impl GameOverState {
+    pub fn new(geng: &Geng, assets: &Rc<Assets>, score: u32) -> Self {
         Self {
             geng: geng.clone(),
             assets: assets.clone(),
@@ -19,53 +22,50 @@ impl PregameState {
                 rotation: 0.0,
                 fov: 50.0,
             },
+
+            score,
+            best_score: AutoSave::load("best_score.json"),
             transition: false,
         }
     }
 }
 
-impl geng::State for PregameState {
+impl geng::State for GameOverState {
     fn draw(&mut self, framebuffer: &mut ugli::Framebuffer) {
         ugli::clear(framebuffer, Some(Color::BLACK), None);
 
-        let framebuffer_size = framebuffer.size().map(|x| x as f32);
-        let center = framebuffer_size / 2.0;
-
-        let reactor_pos = vec2(15.0, -5.0);
-
-        // Get distance to reactor
-        let mouse_pos = self.geng.window().mouse_pos().map(|x| x as f32);
-        let mouse_world_pos = self.camera.screen_to_world(framebuffer_size, mouse_pos);
-        let distance = (reactor_pos - mouse_world_pos).len();
-
-        let s = Color::rgb(0.0, 0.5, 0.0);
-        let e = Color::rgb(0.0, 1.0, 0.0);
-        let f = 1.0 - (distance / 40.0).clamp(0.0, 1.0);
-        let reactor_color = Color::rgb(
-            s.r + (e.r - s.r) * f,
-            s.g + (e.g - s.g) * f,
-            s.b + (e.b - s.b) * f,
-        );
-
-        // Ludum Dare 49 - Unstable
+        let reactor_pos = vec2(15.0, -2.5);
         let font = &self.assets.font;
-        font.draw(
-            framebuffer,
-            &geng::PixelPerfectCamera,
-            "Ludum Dare 49 - Unstable",
-            vec2(center.x, 5.0),
-            geng::TextAlign::CENTER,
-            24.0,
-            Color::WHITE,
-        );
 
-        // Unstable Asteroids
+        // Game over
         font.draw(
             framebuffer,
             &self.camera,
-            "Unstable Asteroids",
+            "GAME OVER",
             vec2(0.0, 15.0),
             geng::TextAlign::CENTER,
+            7.5,
+            Color::WHITE,
+        );
+
+        // Score
+        font.draw(
+            framebuffer,
+            &self.camera,
+            &format!("SCORE: {}", self.score),
+            vec2(-30.0, 0.0),
+            geng::TextAlign::LEFT,
+            7.5,
+            Color::WHITE,
+        );
+
+        // Best Score
+        font.draw(
+            framebuffer,
+            &self.camera,
+            &format!("BEST:   {}", *self.best_score),
+            vec2(-30.0, -10.0),
+            geng::TextAlign::LEFT,
             7.5,
             Color::WHITE,
         );
@@ -74,17 +74,8 @@ impl geng::State for PregameState {
         font.draw(
             framebuffer,
             &self.camera,
-            "PRESS ENTER TO",
-            vec2(-10.0, 0.0),
-            geng::TextAlign::CENTER,
-            5.0,
-            Color::WHITE,
-        );
-        font.draw(
-            framebuffer,
-            &self.camera,
-            "STABILIZE",
-            vec2(-10.0, -10.0),
+            "PRESS ENTER TO STABILIZE",
+            vec2(0.0, -20.0),
             geng::TextAlign::CENTER,
             5.0,
             Color::WHITE,
@@ -96,7 +87,7 @@ impl geng::State for PregameState {
             &self.camera,
             AABB::point(reactor_pos).extend_uniform(10.0),
             &self.assets.nuclear,
-            reactor_color,
+            Color::rgb(0.0, 0.5, 0.0),
         );
     }
 
@@ -115,9 +106,13 @@ impl geng::State for PregameState {
         if !self.transition {
             return None;
         }
-        self.transition = false;
 
-        let game_state = crate::game::GameState::new(&self.geng, &self.assets);
-        Some(geng::Transition::Push(Box::new(game_state)))
+        // Update best score
+        if self.score > *self.best_score {
+            *self.best_score = self.score;
+            self.best_score.save();
+        }
+
+        Some(geng::Transition::Pop)
     }
 }

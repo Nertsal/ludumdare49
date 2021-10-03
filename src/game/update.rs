@@ -122,6 +122,9 @@ impl GameState {
 
         // Prepare new asteroids
         for break_asteroid in self.asteroids.iter().filter(|asteroid| asteroid.break_self) {
+            // Score
+            self.score += 1;
+
             // Particles
             self.particle_queue.push(asteroid_particles(break_asteroid));
 

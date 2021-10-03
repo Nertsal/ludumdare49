@@ -1,6 +1,7 @@
 use geng::prelude::*;
 
 mod game;
+mod game_over;
 mod pregame;
 mod renderer;
 

@@ -31,6 +31,7 @@ pub struct GameState {
     framebuffer_size: Vec2<f32>,
 
     // Actual game data
+    score: u32,
     difficulty: f32,
     border: AABB<f32>,
 
@@ -60,6 +61,7 @@ impl GameState {
             framebuffer_size: vec2(1.0, 1.0),
 
             // Actual game data
+            score: 0,
             difficulty: 0.0,
             border: AABB::ZERO.extend_symmetric(BORDER_SIZE / 2.0),
 
@@ -100,5 +102,14 @@ impl geng::State for GameState {
 
     fn handle_event(&mut self, event: geng::Event) {
         self.hande_event_impl(event);
+    }
+
+    fn transition(&mut self) -> Option<geng::Transition> {
+        if self.reactor.health > 0.0 {
+            return None;
+        }
+
+        let game_over = crate::game_over::GameOverState::new(&self.geng, &self.assets, self.score);
+        Some(geng::Transition::Switch(Box::new(game_over)))
     }
 }
