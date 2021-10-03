@@ -31,6 +31,7 @@ pub struct Sounds {
     pub explosion: geng::Sound,
     pub select: geng::Sound,
     pub item_select: geng::Sound,
+    pub purchase: geng::Sound,
 }
 
 #[derive(geng::Assets)]

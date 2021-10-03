@@ -55,6 +55,7 @@ impl GameState {
                 // Check if we have enough money
                 if self.money >= self.shop_items[select].cost {
                     // Purchase
+                    self.assets.sounds.purchase.play();
                     let new_item = self.gen_shop_item();
                     let purchase = std::mem::replace(&mut self.shop_items[select], new_item);
                     self.money -= purchase.cost;
